@@ -1,0 +1,630 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3D9CD670-1924-4B60-A646-CB3EE3CBBB65}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SgServer</RootNamespace>
+    <ProjectName>netsystem_vc141</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <PlatformToolset>v141</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="..\..\support.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="..\..\support.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>netsystem</TargetName>
+    <IncludePath>C:\Program Files (x86)\Windows Kits\8.1\Include\shared;$(IncludePath)</IncludePath>
+    <OutDir>..\..\..\bin_godot\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectName).dir\obj\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Program Files (x86)\Windows Kits\8.1\Include\shared;$(IncludePath)</IncludePath>
+    <OutDir>..\..\..\bin_godot\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectName).dir\obj\$(Configuration)\</IntDir>
+    <TargetName>netsystem</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pthread.lib;MyToolkit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <ShowProgress>
+      </ShowProgress>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>MSVCRT.lib</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(ProjectDir)..\lib\$(Configuration)\$(TargetName).lib</ImportLibrary>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../src;../src/thirdparty/libuv/include;../src/thirdparty/libuv/src;../src/thirdparty/libevent/build/include;../src/thirdparty/libevent/include;../src/thirdparty/libevent/WIN32-Code;../src/thirdparty/libevhtp/include;../src/thirdparty/libevhtp/compat;../src/thirdparty/libevhtp/WIN32-Port;../src/thirdparty/libcurl/include;../src/thirdparty/libcurl/lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;MY_BUILDING_SHARED;NETSYSTEM_MT=1;_VERBOSE_TRACE_;HAVE_STRUCT_TIMESPEC;EVHTP_EXPORT=;EVHTP_SYS_ARCH=32;NO_SYS_UN;NO_STRNDUP;TINYTEST_LOCAL;BUILDING_LIBCURL;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>../src;../src/thirdparty/libuv/include;../src/thirdparty/libuv/src;../src/thirdparty/libevent/build/include;../src/thirdparty/libevent/include;../src/thirdparty/libevent/WIN32-Code;../src/thirdparty/libevhtp/include;../src/thirdparty/libevhtp/compat;../src/thirdparty/libevhtp/WIN32-Port;../src/thirdparty/libcurl/include;../src/thirdparty/libcurl/lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;MY_BUILDING_SHARED;NETSYSTEM_MT=1;_VERBOSE_TRACE_;HAVE_STRUCT_TIMESPEC;EVHTP_EXPORT=;EVHTP_SYS_ARCH=32;NO_SYS_UN;NO_STRNDUP;TINYTEST_LOCAL;BUILDING_LIBCURL;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pthread.lib;MyToolkit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <ShowProgress>
+      </ShowProgress>
+      <ImportLibrary>$(ProjectDir)..\lib\$(Configuration)\$(TargetName).lib</ImportLibrary>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\amigaos.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\asyn-ares.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\asyn-thread.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\base64.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\conncache.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\connect.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\content_encoding.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\cookie.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_addrinfo.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_des.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_endian.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_fnmatch.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_gethostname.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_gssapi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_memrchr.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_multibyte.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_ntlm_core.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_ntlm_wb.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_rtmp.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_sasl.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_sspi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_threads.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\dict.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\dotdot.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\easy.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\escape.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\file.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\fileinfo.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\formdata.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ftp.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ftplistparser.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\getenv.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\getinfo.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\gopher.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hash.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hmac.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostasyn.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostcheck.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostip.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostip4.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostip6.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostsyn.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http2.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_chunks.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_digest.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_negotiate.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_ntlm.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_proxy.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\idn_win32.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\if2ip.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\imap.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\inet_ntop.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\inet_pton.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\krb5.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ldap.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\llist.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\md4.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\md5.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\memdebug.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\mprintf.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\multi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\netrc.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\non-ascii.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\nonblock.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\openldap.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\parsedate.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\pingpong.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\pipeline.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\pop3.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\progress.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\rand.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\rtsp.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\security.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\select.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\sendf.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\slist.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\smb.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\smtp.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\socks.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\socks_gssapi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\socks_sspi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\speedcheck.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\splay.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ssh.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strcase.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strdup.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strerror.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strtok.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strtoofft.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\system_win32.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\telnet.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\tftp.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\timeval.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\transfer.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\url.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\cleartext.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\cram.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\digest.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\digest_sspi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\krb5_gssapi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\krb5_sspi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\ntlm.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\ntlm_sspi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\oauth2.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\spnego_gssapi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\spnego_sspi.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\vauth.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\version.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\axtls.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\cyassl.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\darwinssl.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\gskit.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\gtls.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\mbedtls.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\nss.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\openssl.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\polarssl.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\polarssl_threadlock.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\schannel.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\vtls.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\warnless.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\wildcard.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\x509asn1.c" />
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\_curl_share.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\buffer.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_async.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_filter.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_pair.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_ratelim.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_sock.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\buffer_iocp.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evdns.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\event.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\event_iocp.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\event_tagging.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evmap.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evrpc.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evthread.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evthread_win32.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evutil.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evutil_rand.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\evutil_time.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\_ev_http.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\listener.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\log.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\signal.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\strlcpy.c" />
+    <ClCompile Include="..\src\thirdparty\libevent\win32select.c" />
+    <ClCompile Include="..\src\thirdparty\libevhtp\evhtp.c" />
+    <ClCompile Include="..\src\thirdparty\libevhtp\numtoa.c" />
+    <ClCompile Include="..\src\thirdparty\libevhtp\WIN32-Port\getopt.c" />
+    <ClCompile Include="..\src\thirdparty\libevhtp\_evhtp_parser.c" />
+    <ClCompile Include="..\src\thirdparty\libevhtp\_evhtp_thread.c" />
+    <ClCompile Include="..\src\base\bip_buf.c" />
+    <ClCompile Include="..\src\base\CamelReaderWriterQueueWL.cpp" />
+    <ClCompile Include="..\src\base\ObjectPool.cpp" />
+    <ClCompile Include="..\src\http\ev\libevhtpd.c" />
+    <ClCompile Include="..\src\http\ev\LibevhtpServer.cpp" />
+    <ClCompile Include="..\src\http\ev\EvHttpServer.cpp" />
+    <ClCompile Include="..\src\http\ev\ev_httpd.c" />
+    <ClCompile Include="..\src\http\libcurl\CURLHttp.cpp" />
+    <ClCompile Include="..\src\http\libcurl\CURLSSL.cpp" />
+    <ClCompile Include="..\src\lobby\AccountStateList.cpp" />
+    <ClCompile Include="..\src\lobby\KjGateLobby.cpp" />
+    <ClCompile Include="..\src\lobby\KjLobby.cpp" />
+    <ClCompile Include="..\src\lobby\KjNullLobby.cpp" />
+    <ClCompile Include="..\src\lobby\UvGateLobby.cpp" />
+    <ClCompile Include="..\src\lobby\UvLobby.cpp" />
+    <ClCompile Include="..\src\lobby\SimpleAccountManager.cpp" />
+    <ClCompile Include="..\src\lobby\SimpleZoneManager.cpp" />
+    <ClCompile Include="..\src\lobby\UvNullLobby.cpp" />
+    <ClCompile Include="..\src\netsystem\dllmain.cpp" />
+    <ClCompile Include="..\src\netsystem\NetSystem.cpp" />
+    <ClCompile Include="..\src\netsystem\NetSystemPlugin.cpp" />
+    <ClCompile Include="..\src\netsystem\UsingNetSystem.cpp" />
+    <ClCompile Include="..\src\tcp\ev\EvConnFactory.cpp" />
+    <ClCompile Include="..\src\tcp\ev\EvClientConn.cpp" />
+    <ClCompile Include="..\src\tcp\ev\EvIsolatedConn.cpp" />
+    <ClCompile Include="..\src\tcp\ev\EvIsolatedConn2.cpp" />
+    <ClCompile Include="..\src\tcp\ev\EvServer.cpp" />
+    <ClCompile Include="..\src\tcp\ev\ev_client.c" />
+    <ClCompile Include="..\src\tcp\ev\ev_server.c" />
+    <ClCompile Include="..\src\tcp\kjgate\KjGateClientConn.cpp" />
+    <ClCompile Include="..\src\tcp\kjgate\KjGateConnFactory.cpp" />
+    <ClCompile Include="..\src\tcp\kjgate\KjGateIsolatedConn.cpp" />
+    <ClCompile Include="..\src\tcp\kjgate\KjGateIsolatedConn2.cpp" />
+    <ClCompile Include="..\src\tcp\kjgate\KjGateServer.cpp" />
+    <ClCompile Include="..\src\tcp\kj\ConnFactoryTrunkQueue.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjClientConn.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjConnFactory.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjConnFactoryBase.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjConnFactoryWorkQueue.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjIsolatedConn.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjIsolatedConn2.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjRootContextDef.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjServer.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjSimpleIoContext.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjSimpleThreadIoContext.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjTcpConnection.cpp" />
+    <ClCompile Include="..\src\tcp\kj\KjTcpIoStream.cpp" />
+    <ClCompile Include="..\src\tcp\TcpConnManager.cpp" />
+    <ClCompile Include="..\src\tcp\TcpEventManager.cpp" />
+    <ClCompile Include="..\src\tcp\TcpInnerPacket.cpp" />
+    <ClCompile Include="..\src\tcp\TcpOuterPacket.cpp" />
+    <ClCompile Include="..\src\tcp\uvgate\UvGateConnFactory.cpp" />
+    <ClCompile Include="..\src\tcp\uvgate\UvGateClientConn.cpp" />
+    <ClCompile Include="..\src\tcp\uvgate\UvGateIsolatedConn.cpp" />
+    <ClCompile Include="..\src\tcp\uvgate\UvGateIsolatedConn2.cpp" />
+    <ClCompile Include="..\src\tcp\uvgate\UvGateServer.cpp" />
+    <ClCompile Include="..\src\tcp\uv\UvConnFactory.cpp" />
+    <ClCompile Include="..\src\tcp\uv\UvClientConn.cpp" />
+    <ClCompile Include="..\src\tcp\uv\UvConnFactoryBase.cpp" />
+    <ClCompile Include="..\src\tcp\uv\UvIsolatedConn.cpp" />
+    <ClCompile Include="..\src\tcp\uv\UvIsolatedConn2.cpp" />
+    <ClCompile Include="..\src\tcp\uv\UvServer.cpp" />
+    <ClCompile Include="..\src\tcp\uv\uv_client.c" />
+    <ClCompile Include="..\src\tcp\uv\uv_server.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\fs-poll.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\inet.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\threadpool.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\uv-common.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\_uv_version.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\async.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\core.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\detect-wakeup.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\dl.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\error.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\fs-event.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\fs.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\getaddrinfo.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\getnameinfo.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\handle.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\loop-watcher.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\pipe.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\poll.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\process-stdio.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\process.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\req.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\_uv_signal.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\snprintf.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\stream.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\tcp.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\thread.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\timer.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\tty.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\udp.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\util.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\winapi.c" />
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\winsock.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\base\concurrent\_concurrent_atomicops.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\amigaos.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\arpa_telnet.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\asyn.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\config-win32.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\conncache.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\connect.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\content_encoding.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\cookie.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curlx.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_addrinfo.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_base64.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_des.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_endian.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_fnmatch.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_gethostname.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_gssapi.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_hmac.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_ldap.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_md4.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_md5.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_memory.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_memrchr.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_multibyte.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_ntlm_core.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_ntlm_wb.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_printf.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_rtmp.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_sasl.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_sec.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_setup.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_setup_once.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_sspi.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_threads.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\dict.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\dotdot.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\easyif.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\escape.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\file.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\fileinfo.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\formdata.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\ftp.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\ftplistparser.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\getinfo.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\gopher.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\hash.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\hostcheck.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\hostip.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http2.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_chunks.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_digest.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_negotiate.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_ntlm.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_proxy.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\if2ip.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\imap.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\inet_ntop.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\inet_pton.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\llist.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\memdebug.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\multihandle.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\multiif.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\netrc.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\non-ascii.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\nonblock.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\parsedate.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\pingpong.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\pipeline.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\pop3.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\progress.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\rand.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\rtsp.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\select.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\sendf.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\setup-vms.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\sigpipe.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\slist.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\smb.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\smtp.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\sockaddr.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\socks.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\speedcheck.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\splay.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\ssh.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strcase.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strdup.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strerror.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strtok.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strtoofft.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\system_win32.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\telnet.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\tftp.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\timeval.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\transfer.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\url.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\urldata.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vauth\digest.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vauth\ntlm.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vauth\vauth.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\axtls.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\cyassl.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\darwinssl.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\gskit.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\gtls.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\mbedtls.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\nssg.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\openssl.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\polarssl.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\polarssl_threadlock.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\schannel.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\vtls.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\warnless.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\wildcard.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\x509asn1.h" />
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\_curl_share.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\bufferevent-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\build\include\event2\event-config.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\changelist-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\compat\sys\queue.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\defer-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\epolltable-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\evbuffer-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\event-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\evmap-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\evrpc-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\evsignal-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\evthread-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\ht-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\http-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\evdns.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\buffer.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\bufferevent.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\bufferevent_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\bufferevent_struct.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\buffer_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\dns.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\dns_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\dns_struct.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\event.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\event_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\event_struct.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\http.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\http_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\http_struct.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\keyvalq_struct.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\listener.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\rpc.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\rpc_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\rpc_struct.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\tag.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\tag_compat.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\thread.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\util.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\visibility.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\evhttp.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\evrpc.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\include\evutil.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\iocp-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\ipv6-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\log-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\minheap-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\mm-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\ratelim-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\strlcpy-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\util-internal.h" />
+    <ClInclude Include="..\src\thirdparty\libevent\WIN32-Code\getopt.h" />
+    <ClInclude Include="..\src\thirdparty\libevhtp\include\evhtp\_evhtp_thread.h" />
+    <ClInclude Include="..\src\thirdparty\libevhtp\log.h" />
+    <ClInclude Include="..\src\thirdparty\libevhtp\refcount.h" />
+    <ClInclude Include="..\src\base\bip_buf.h" />
+    <ClInclude Include="..\src\base\CamelReaderWriterQueueWL.h" />
+    <ClInclude Include="..\src\base\concurrent\readerwriterqueue.h" />
+    <ClInclude Include="..\src\base\ObjectPool.hpp" />
+    <ClInclude Include="..\src\common\UsingMyToolkitMini.h" />
+    <ClInclude Include="..\src\http\ev\libevhtpd.h" />
+    <ClInclude Include="..\src\http\ev\LibevhtpServer.h" />
+    <ClInclude Include="..\src\http\ev\EvHttpServer.h" />
+    <ClInclude Include="..\src\http\ev\ev_httpd.h" />
+    <ClInclude Include="..\src\http\http_thr_aux.h" />
+    <ClInclude Include="..\src\http\IHttpServer.h" />
+    <ClInclude Include="..\src\http\IURLHttpRequest.h" />
+    <ClInclude Include="..\src\http\IURLSSLRequest.h" />
+    <ClInclude Include="..\src\http\libcurl\CURLHttp.h" />
+    <ClInclude Include="..\src\http\libcurl\CURLSSL.h" />
+    <ClInclude Include="..\src\http\UsingHttp.h" />
+    <ClInclude Include="..\src\lobby\AccountStateList.h" />
+    <ClInclude Include="..\src\lobby\KjGateLobby.h" />
+    <ClInclude Include="..\src\lobby\KjLobby.h" />
+    <ClInclude Include="..\src\lobby\KjNullLobby.h" />
+    <ClInclude Include="..\src\lobby\UvGateLobby.h" />
+    <ClInclude Include="..\src\lobby\IAccountManager.h" />
+    <ClInclude Include="..\src\lobby\IAccountStateList.h" />
+    <ClInclude Include="..\src\lobby\ILobby.h" />
+    <ClInclude Include="..\src\lobby\IZoneManager.h" />
+    <ClInclude Include="..\src\lobby\UvLobby.h" />
+    <ClInclude Include="..\src\lobby\SimpleAccountManager.h" />
+    <ClInclude Include="..\src\lobby\SimpleZoneManager.h" />
+    <ClInclude Include="..\src\lobby\UvNullLobby.h" />
+    <ClInclude Include="..\src\netsystem\INetSystem.h" />
+    <ClInclude Include="..\src\netsystem\NetSystem.h" />
+    <ClInclude Include="..\src\netsystem\UsingNetSystem.h" />
+    <ClInclude Include="..\src\tcp\ev\client_handle.h" />
+    <ClInclude Include="..\src\tcp\ev\EvConnFactory.h" />
+    <ClInclude Include="..\src\tcp\ev\EvClientConn.h" />
+    <ClInclude Include="..\src\tcp\ev\EvIsolatedConn.h" />
+    <ClInclude Include="..\src\tcp\ev\EvIsolatedConn2.h" />
+    <ClInclude Include="..\src\tcp\ev\EvServer.h" />
+    <ClInclude Include="..\src\tcp\ev\ev_client.h" />
+    <ClInclude Include="..\src\tcp\ev\ev_server.h" />
+    <ClInclude Include="..\src\tcp\ev\server_handle.h" />
+    <ClInclude Include="..\src\tcp\IPacket.h" />
+    <ClInclude Include="..\src\tcp\ITcpClient.h" />
+    <ClInclude Include="..\src\tcp\ITcpConn.h" />
+    <ClInclude Include="..\src\tcp\ITcpConnFactory.h" />
+    <ClInclude Include="..\src\tcp\ITcpConnManager.h" />
+    <ClInclude Include="..\src\tcp\ITcpEventManager.h" />
+    <ClInclude Include="..\src\tcp\ITcpIsolated.h" />
+    <ClInclude Include="..\src\tcp\ITcpServer.h" />
+    <ClInclude Include="..\src\tcp\kjgate\KjGateClientConn.hpp" />
+    <ClInclude Include="..\src\tcp\kjgate\KjGateConnFactory.hpp" />
+    <ClInclude Include="..\src\tcp\kjgate\KjGateIsolatedConn.hpp" />
+    <ClInclude Include="..\src\tcp\kjgate\KjGateIsolatedConn2.hpp" />
+    <ClInclude Include="..\src\tcp\kjgate\KjGateServer.hpp" />
+    <ClInclude Include="..\src\tcp\kj\ConnFactoryTrunkQueue.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjClientConn.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjConnFactory.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjConnFactoryBase.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjConnFactoryWorkQueue.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjIsolatedConn.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjIsolatedConn2.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjRootContextDef.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjServer.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjSimpleIoContext.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjSimpleThreadIoContext.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjTcpConnection.hpp" />
+    <ClInclude Include="..\src\tcp\kj\KjTcpIoStream.hpp" />
+    <ClInclude Include="..\src\tcp\TcpConnManager.h" />
+    <ClInclude Include="..\src\tcp\TcpEventManager.h" />
+    <ClInclude Include="..\src\tcp\TcpInnerPacket.h" />
+    <ClInclude Include="..\src\tcp\TcpOuterPacket.h" />
+    <ClInclude Include="..\src\tcp\tcp_def.h" />
+    <ClInclude Include="..\src\tcp\tcp_packet_def.h" />
+    <ClInclude Include="..\src\tcp\uvgate\UvGateConnFactory.h" />
+    <ClInclude Include="..\src\tcp\uvgate\UvGateClientConn.h" />
+    <ClInclude Include="..\src\tcp\uvgate\UvGateIsolatedConn.h" />
+    <ClInclude Include="..\src\tcp\uvgate\UvGateIsolatedConn2.h" />
+    <ClInclude Include="..\src\tcp\uvgate\UvGateServer.h" />
+    <ClInclude Include="..\src\tcp\uv\UvConnFactory.h" />
+    <ClInclude Include="..\src\tcp\uv\UvClientConn.h" />
+    <ClInclude Include="..\src\tcp\uv\UvConnFactoryBase.h" />
+    <ClInclude Include="..\src\tcp\uv\UvIsolatedConn.h" />
+    <ClInclude Include="..\src\tcp\uv\UvIsolatedConn2.h" />
+    <ClInclude Include="..\src\tcp\uv\UvServer.h" />
+    <ClInclude Include="..\src\tcp\uv\uv_client.h" />
+    <ClInclude Include="..\src\tcp\uv\uv_server.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\include\tree.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-errno.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-threadpool.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-version.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-win.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\heap-inl.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\queue.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\uv-common.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\atomicops-inl.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\handle-inl.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\internal.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\req-inl.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\stream-inl.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\winapi.h" />
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\winsock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\thirdparty\libevent\evconfig-private.h.in" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

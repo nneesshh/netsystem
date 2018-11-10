@@ -1,0 +1,1680 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{3248768a-1364-4818-a15b-2c50cca8b574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\netsystem">
+      <UniqueIdentifier>{5dac22b8-35a0-42d0-9d49-08253db9fed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tcp">
+      <UniqueIdentifier>{07306d69-6352-4f0b-9d3e-d1a73a48d424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tcp\ev">
+      <UniqueIdentifier>{d89e51f3-51d0-4946-bf35-ee9148193063}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\http">
+      <UniqueIdentifier>{9199dfe2-2228-4cf1-88c4-732044f8c8ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\http\ev">
+      <UniqueIdentifier>{e953f372-6b86-4a33-8265-d0b005ec58e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\http\libcurl">
+      <UniqueIdentifier>{c5a354a0-f30b-43cb-bd6c-6da16779462b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\lobby">
+      <UniqueIdentifier>{5d2bc1f7-c005-48ac-a1e9-85b9c995033b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{9c19bac4-7251-4327-ae5a-718900e826eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tcp\uv">
+      <UniqueIdentifier>{36a6378e-57ea-455d-94d3-4d6aba588d35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tcp\uvgate">
+      <UniqueIdentifier>{5936bd1b-e304-48ab-b66b-69d1b711b61a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base">
+      <UniqueIdentifier>{171aada3-bc30-4032-afb2-8b81ac1f9080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\base\concurrent">
+      <UniqueIdentifier>{5d36c100-bf71-4907-a0de-0750416df72c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tcp\kj">
+      <UniqueIdentifier>{090798e3-6014-4ae8-8349-06a3b3633d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tcp\kjgate">
+      <UniqueIdentifier>{480852fc-5de7-43a2-b580-bb575143bbcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty">
+      <UniqueIdentifier>{3375c8e6-404b-46e1-97fe-368c9548d039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libuv">
+      <UniqueIdentifier>{8de15e06-24bf-43d7-a003-e18a295aec16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libuv\src">
+      <UniqueIdentifier>{f7bed7ca-31f5-4d64-b9a0-08a6752a53bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libuv\src\win">
+      <UniqueIdentifier>{e97faa49-f827-417e-8bcc-061ad979d291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libuv\include">
+      <UniqueIdentifier>{0767f803-ea82-4c4f-8f83-a1ed526e9401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevhtp">
+      <UniqueIdentifier>{28350900-ad26-40e7-9660-1c3fb1e6885a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevhtp\WIN32-Port">
+      <UniqueIdentifier>{010f2756-436b-4409-9226-ac513d482fd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent">
+      <UniqueIdentifier>{ddddb580-b107-4155-9c5f-29013c8ac368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent\Source Extra">
+      <UniqueIdentifier>{4f45d518-d759-4099-8a13-544d80a7ab95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent\Header Compat">
+      <UniqueIdentifier>{fc23563d-20cc-41be-af5c-00677ec7773f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent\Header Files">
+      <UniqueIdentifier>{d9f0bda3-f0f1-47a7-a22c-403d613f0e8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent\Headers Private">
+      <UniqueIdentifier>{e474f02a-e27e-4fa9-9ee8-a88aa000acc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent\Headers Public">
+      <UniqueIdentifier>{2b568f3c-9384-4845-828c-ddf9482c74e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libevent\Source Core">
+      <UniqueIdentifier>{9ebf68bb-95ee-4683-867d-d4915f9b4c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libcurl">
+      <UniqueIdentifier>{d7c96622-552a-4680-bbbb-cfb753b8c568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libcurl\Header Files">
+      <UniqueIdentifier>{4a87cd43-7b57-454d-92ed-f4135c7ff875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\thirdparty\libcurl\Source Files">
+      <UniqueIdentifier>{0c9eb59a-b766-4abf-8a17-d54f04983f35}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\http\ev\EvHttpServer.h">
+      <Filter>src\http\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\ev\ev_httpd.h">
+      <Filter>src\http\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\libcurl\CURLSSL.h">
+      <Filter>src\http\libcurl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\libcurl\CURLHttp.h">
+      <Filter>src\http\libcurl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\UsingHttp.h">
+      <Filter>src\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\IHttpServer.h">
+      <Filter>src\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\IURLHttpRequest.h">
+      <Filter>src\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\IURLSSLRequest.h">
+      <Filter>src\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\TcpEventManager.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpClient.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpConn.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpConnFactory.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpConnManager.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpEventManager.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpIsolated.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ITcpServer.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\TcpConnManager.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\ev_client.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\ev_server.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\EvConnFactory.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\netsystem\UsingNetSystem.h">
+      <Filter>src\netsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\netsystem\INetSystem.h">
+      <Filter>src\netsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\ev\LibevhtpServer.h">
+      <Filter>src\http\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\ev\libevhtpd.h">
+      <Filter>src\http\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\http\http_thr_aux.h">
+      <Filter>src\http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\uv_server.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\uv_client.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\netsystem\NetSystem.h">
+      <Filter>src\netsystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\UvConnFactory.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\UsingMyToolkitMini.h">
+      <Filter>src\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uvgate\UvGateConnFactory.h">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\TcpInnerPacket.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\TcpOuterPacket.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\SimpleZoneManager.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\AccountStateList.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\IAccountManager.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\IAccountStateList.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\ILobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\IZoneManager.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\tcp_def.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\tcp_packet_def.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\UvGateLobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\UvLobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uvgate\UvGateServer.h">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uvgate\UvGateClientConn.h">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uvgate\UvGateIsolatedConn.h">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uvgate\UvGateIsolatedConn2.h">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\EvServer.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\EvIsolatedConn2.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\EvIsolatedConn.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\EvClientConn.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\UvClientConn.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\UvIsolatedConn.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\UvIsolatedConn2.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\UvServer.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\uv\UvConnFactoryBase.h">
+      <Filter>src\tcp\uv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\client_handle.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\ev\server_handle.h">
+      <Filter>src\tcp\ev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\base\bip_buf.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\base\ObjectPool.hpp">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\base\concurrent\readerwriterqueue.h">
+      <Filter>src\base\concurrent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\ConnFactoryTrunkQueue.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjConnFactory.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjConnFactoryBase.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjConnFactoryWorkQueue.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjRootContextDef.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjSimpleIoContext.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjSimpleThreadIoContext.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjClientConn.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjTcpConnection.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjIsolatedConn.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjIsolatedConn2.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjServer.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kj\KjTcpIoStream.hpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kjgate\KjGateConnFactory.hpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kjgate\KjGateClientConn.hpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kjgate\KjGateIsolatedConn.hpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kjgate\KjGateIsolatedConn2.hpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\kjgate\KjGateServer.hpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\KjGateLobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\KjLobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\KjNullLobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\UvNullLobby.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tcp\IPacket.h">
+      <Filter>src\tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\base\CamelReaderWriterQueueWL.h">
+      <Filter>src\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\heap-inl.h">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\queue.h">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\uv-common.h">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\atomicops-inl.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\handle-inl.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\internal.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\req-inl.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\stream-inl.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\winapi.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\src\win\winsock.h">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv.h">
+      <Filter>src\thirdparty\libuv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\include\tree.h">
+      <Filter>src\thirdparty\libuv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-errno.h">
+      <Filter>src\thirdparty\libuv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-threadpool.h">
+      <Filter>src\thirdparty\libuv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-version.h">
+      <Filter>src\thirdparty\libuv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libuv\include\uv-win.h">
+      <Filter>src\thirdparty\libuv\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevhtp\log.h">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevhtp\refcount.h">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\evdns.h">
+      <Filter>src\thirdparty\libevent\Header Compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event.h">
+      <Filter>src\thirdparty\libevent\Header Compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\evhttp.h">
+      <Filter>src\thirdparty\libevent\Header Compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\evrpc.h">
+      <Filter>src\thirdparty\libevent\Header Compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\evutil.h">
+      <Filter>src\thirdparty\libevent\Header Compat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\evconfig-private.h.in">
+      <Filter>src\thirdparty\libevent\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\bufferevent-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\changelist-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\compat\sys\queue.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\defer-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\epolltable-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\evbuffer-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\event-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\evmap-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\evrpc-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\evsignal-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\evthread-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\ht-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\http-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\iocp-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\ipv6-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\log-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\minheap-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\mm-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\ratelim-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\strlcpy-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\util-internal.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\WIN32-Code\getopt.h">
+      <Filter>src\thirdparty\libevent\Headers Private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\build\include\event2\event-config.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\buffer.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\bufferevent.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\bufferevent_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\bufferevent_struct.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\buffer_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\dns.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\dns_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\dns_struct.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\event.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\event_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\event_struct.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\http.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\http_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\http_struct.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\keyvalq_struct.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\listener.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\rpc.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\rpc_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\rpc_struct.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\tag.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\tag_compat.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\thread.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\util.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevent\include\event2\visibility.h">
+      <Filter>src\thirdparty\libevent\Headers Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\base\concurrent\_concurrent_atomicops.h">
+      <Filter>src\base\concurrent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\amigaos.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\arpa_telnet.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\asyn.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\config-win32.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\conncache.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\connect.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\content_encoding.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\cookie.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_addrinfo.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_base64.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_des.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_endian.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_fnmatch.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_gethostname.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_gssapi.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_hmac.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_ldap.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_md4.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_md5.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_memory.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_memrchr.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_multibyte.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_ntlm_core.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_ntlm_wb.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_printf.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_rtmp.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_sasl.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_sec.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_setup.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_setup_once.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_sspi.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curl_threads.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\curlx.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\dict.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\dotdot.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\easyif.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\escape.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\file.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\fileinfo.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\formdata.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\ftp.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\ftplistparser.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\getinfo.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\gopher.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\hash.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\hostcheck.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\hostip.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http2.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_chunks.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_digest.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_negotiate.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_ntlm.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\http_proxy.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\if2ip.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\imap.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\inet_ntop.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\inet_pton.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\llist.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\memdebug.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\multihandle.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\multiif.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\netrc.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\non-ascii.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\nonblock.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\parsedate.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\pingpong.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\pipeline.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\pop3.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\progress.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\rand.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\rtsp.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\select.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\sendf.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\setup-vms.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\sigpipe.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\slist.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\smb.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\smtp.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\sockaddr.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\socks.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\speedcheck.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\splay.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\ssh.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strcase.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strdup.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strerror.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strtok.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\strtoofft.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\system_win32.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\telnet.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\tftp.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\timeval.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\transfer.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\urldata.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\url.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\warnless.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\wildcard.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\x509asn1.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vauth\digest.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vauth\ntlm.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vauth\vauth.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\axtls.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\cyassl.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\darwinssl.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\gskit.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\gtls.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\mbedtls.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\nssg.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\openssl.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\polarssl.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\polarssl_threadlock.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\schannel.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\vtls\vtls.h">
+      <Filter>src\thirdparty\libcurl\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libevhtp\include\evhtp\_evhtp_thread.h">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\thirdparty\libcurl\lib\_curl_share.h">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\lobby\SimpleAccountManager.h">
+      <Filter>src\lobby</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\http\ev\EvHttpServer.cpp">
+      <Filter>src\http\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\ev\ev_httpd.c">
+      <Filter>src\http\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\TcpEventManager.cpp">
+      <Filter>src\tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\TcpConnManager.cpp">
+      <Filter>src\tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\ev_client.c">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\ev_server.c">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\EvConnFactory.cpp">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\netsystem\NetSystemPlugin.cpp">
+      <Filter>src\netsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\netsystem\UsingNetSystem.cpp">
+      <Filter>src\netsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\ev\LibevhtpServer.cpp">
+      <Filter>src\http\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\ev\libevhtpd.c">
+      <Filter>src\http\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\libcurl\CURLSSL.cpp">
+      <Filter>src\http\libcurl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\http\libcurl\CURLHttp.cpp">
+      <Filter>src\http\libcurl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\uv_client.c">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\uv_server.c">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\netsystem\dllmain.cpp">
+      <Filter>src\netsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\UvConnFactory.cpp">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\netsystem\NetSystem.cpp">
+      <Filter>src\netsystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uvgate\UvGateConnFactory.cpp">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\TcpOuterPacket.cpp">
+      <Filter>src\tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\TcpInnerPacket.cpp">
+      <Filter>src\tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\SimpleZoneManager.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\AccountStateList.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\UvGateLobby.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\UvLobby.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uvgate\UvGateServer.cpp">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uvgate\UvGateClientConn.cpp">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uvgate\UvGateIsolatedConn.cpp">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uvgate\UvGateIsolatedConn2.cpp">
+      <Filter>src\tcp\uvgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\EvServer.cpp">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\EvIsolatedConn2.cpp">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\EvIsolatedConn.cpp">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\ev\EvClientConn.cpp">
+      <Filter>src\tcp\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\UvClientConn.cpp">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\UvIsolatedConn.cpp">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\UvIsolatedConn2.cpp">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\UvServer.cpp">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\uv\UvConnFactoryBase.cpp">
+      <Filter>src\tcp\uv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\base\bip_buf.c">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\base\ObjectPool.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\ConnFactoryTrunkQueue.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjConnFactory.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjConnFactoryBase.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjConnFactoryWorkQueue.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjRootContextDef.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjSimpleIoContext.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjSimpleThreadIoContext.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjClientConn.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjTcpConnection.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjIsolatedConn.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjIsolatedConn2.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjServer.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kj\KjTcpIoStream.cpp">
+      <Filter>src\tcp\kj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kjgate\KjGateConnFactory.cpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kjgate\KjGateClientConn.cpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kjgate\KjGateIsolatedConn.cpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kjgate\KjGateIsolatedConn2.cpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tcp\kjgate\KjGateServer.cpp">
+      <Filter>src\tcp\kjgate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\KjLobby.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\KjGateLobby.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\UvNullLobby.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\KjNullLobby.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\base\CamelReaderWriterQueueWL.cpp">
+      <Filter>src\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\fs-poll.c">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\inet.c">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\threadpool.c">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\uv-common.c">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\async.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\core.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\detect-wakeup.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\dl.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\error.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\fs.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\fs-event.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\getaddrinfo.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\getnameinfo.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\handle.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\loop-watcher.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\pipe.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\thread.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\poll.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\process.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\process-stdio.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\req.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\snprintf.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\stream.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\tcp.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\tty.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\timer.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\udp.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\util.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\winapi.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\winsock.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevhtp\evhtp.c">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevhtp\numtoa.c">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevhtp\_evhtp_parser.c">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevhtp\_evhtp_thread.c">
+      <Filter>src\thirdparty\libevhtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevhtp\WIN32-Port\getopt.c">
+      <Filter>src\thirdparty\libevhtp\WIN32-Port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evdns.c">
+      <Filter>src\thirdparty\libevent\Source Extra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\event_tagging.c">
+      <Filter>src\thirdparty\libevent\Source Extra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evrpc.c">
+      <Filter>src\thirdparty\libevent\Source Extra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\buffer.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_async.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_filter.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_pair.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_ratelim.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\bufferevent_sock.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\buffer_iocp.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\event.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\event_iocp.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evmap.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evthread.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evthread_win32.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evutil.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evutil_rand.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\evutil_time.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\listener.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\log.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\signal.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\strlcpy.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\win32select.c">
+      <Filter>src\thirdparty\libevent\Source Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\win\_uv_signal.c">
+      <Filter>src\thirdparty\libuv\src\win</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\amigaos.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\asyn-ares.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\asyn-thread.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\base64.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\conncache.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\connect.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\content_encoding.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\cookie.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_addrinfo.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_des.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_endian.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_fnmatch.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_gethostname.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_gssapi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_memrchr.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_multibyte.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_ntlm_core.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_ntlm_wb.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_rtmp.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_sasl.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_sspi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\curl_threads.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\dict.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\dotdot.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\easy.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\escape.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\file.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\fileinfo.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\formdata.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ftp.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ftplistparser.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\getenv.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\getinfo.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\gopher.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hash.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hmac.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostasyn.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostcheck.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostip4.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostip6.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostip.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\hostsyn.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http2.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_chunks.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_digest.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_negotiate.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_ntlm.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\http_proxy.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\idn_win32.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\if2ip.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\imap.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\inet_ntop.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\inet_pton.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\krb5.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ldap.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\llist.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\md4.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\md5.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\memdebug.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\mprintf.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\multi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\netrc.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\non-ascii.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\nonblock.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\openldap.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\parsedate.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\pingpong.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\pipeline.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\pop3.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\progress.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\rand.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\rtsp.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\security.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\select.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\sendf.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\slist.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\smb.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\smtp.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\socks.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\socks_gssapi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\socks_sspi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\speedcheck.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\splay.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\ssh.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strcase.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strdup.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strerror.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strtok.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\strtoofft.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\system_win32.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\telnet.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\tftp.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\timeval.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\transfer.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\url.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\version.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\warnless.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\wildcard.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\x509asn1.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\cleartext.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\cram.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\digest.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\digest_sspi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\krb5_gssapi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\krb5_sspi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\ntlm.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\ntlm_sspi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\oauth2.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\spnego_gssapi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\spnego_sspi.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vauth\vauth.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\axtls.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\cyassl.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\darwinssl.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\gskit.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\gtls.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\mbedtls.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\nss.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\openssl.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\polarssl.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\polarssl_threadlock.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\schannel.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\vtls\vtls.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libuv\src\_uv_version.c">
+      <Filter>src\thirdparty\libuv\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libevent\_ev_http.c">
+      <Filter>src\thirdparty\libevent\Source Extra</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thirdparty\libcurl\lib\_curl_share.c">
+      <Filter>src\thirdparty\libcurl\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lobby\SimpleAccountManager.cpp">
+      <Filter>src\lobby</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

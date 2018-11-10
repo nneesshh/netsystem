@@ -1,0 +1,259 @@
+//------------------------------------------------------------------------------
+//  KjServer.cpp
+//  (C) 2016 n.lee
+//------------------------------------------------------------------------------
+#include "KjServer.hpp"
+
+#include <assert.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "../TcpConnManager.h"
+#include "../TcpEventManager.h"
+
+#include "KjConnFactory.hpp"
+#include "KjClientConn.hpp"
+
+#ifdef _MSC_VER
+#ifdef _DEBUG
+#define new   new(_NORMAL_BLOCK, __FILE__,__LINE__)
+#endif
+#endif
+
+#define SERVER_SELF_CHECK_TIME				5000L
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+CKjServer::CKjServer(ITcpConnFactory *pFactory)
+	: _refConnFactory(pFactory)
+	, _eventManager(new CTcpEventManager()) {
+	
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+CKjServer::~CKjServer() {
+	// must clear because handler may be released already
+	_eventManager->ClearAllEventHandlers();
+
+	// cleanup all client
+	_refConnFactory->GetConnManager().OnRemoveAllClient(this);
+
+	//
+	SAFE_DELETE(_eventManager);
+
+	_refConnFactory = nullptr;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjServer::OnSelfCheck() {
+
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+ITcpClient *
+CKjServer::OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp) {
+
+	ITcpClient *pClient = nullptr;
+
+	if (IsClosed())
+		goto reject_connection;
+
+	if (!_eventManager->IsReady())
+		goto reject_connection;
+
+	//
+	pClient = _refConnFactory->CreateTcpClientOnServer(sPeerIp, this);
+	if (pClient) {
+		//
+		assert(!pClient->IsConnected());
+		{
+			pClient->SetConnected(true);
+			pClient->OnConnect();
+		}
+
+		// connection is ready
+		_refConnFactory->ConfirmClientIsReady(pClient, streamptr);
+		return pClient;
+	}
+
+	// final label 
+reject_connection:
+	if (pClient) {
+		_refConnFactory->DisposeConnection(pClient);
+	}
+	return pClient;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjServer::OnDisposeClient(ITcpClient *pClient) {
+
+	if (pClient) {
+		//
+		pClient->DisposeConnection();
+
+		//
+		if (pClient->IsConnected()) {
+			_refConnFactory->AddClientDisconnectCb(this, pClient, &_refConnFactory->GetConnManager());
+		}
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+int
+CKjServer::Open(void *base, unsigned short port) {
+	
+	int nResult = 0;
+
+	// init base
+	_thr_tioContext = kj::addRef(*(KjSimpleThreadIoContext *)base);
+	_thr_tasks = _thr_tioContext->CreateTaskSet(*this);
+
+	// init shutdown watcher
+	auto paf = kj::newPromiseAndFulfiller<void>();
+	_thr_shutdownPromise = paf.promise.fork();
+	_thr_shutdownFulfiller = kj::mv(paf.fulfiller);
+
+	// init port
+	_serverPort = port;
+
+	// init listener
+	struct sockaddr_in sin;
+	memset(&sin, 0, sizeof(sin));
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(_serverPort);
+
+	kj::Own<kj::NetworkAddress>&& addr = _thr_tioContext->GetNetwork().getSockaddr((const sockaddr *)&sin, sizeof(sin));
+	kj::Own<kj::ConnectionReceiver> listener = addr->listen();
+
+	_serverFd = listener->getfd();
+	if (-1 == _serverFd) {
+		nResult = -1;
+	}
+	else {
+		fprintf(stderr, "server init on port(%d) fd(%d)...\n",
+			_serverPort, (int)_serverFd);
+
+		_thr_tasks->add(StartAccepLoop(kj::mv(listener)),
+			"server start accept loop");
+	}
+	return nResult;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjServer::Close() {
+	
+	if (!_closed) {
+		// dispose shutdown watcher
+		_thr_shutdownFulfiller->fulfill();
+		_thr_shutdownPromise = nullptr;
+		_thr_shutdownFulfiller = nullptr;
+
+		// dispose base
+		_thr_tioContext = nullptr;
+		_thr_tasks = nullptr;
+		
+		//
+		for (auto& iter : _thr_tcpStreamDict) {
+			//
+			auto& tcpStream = iter.second;
+			tcpStream->Disconnect();
+		}
+		_thr_tcpStreamDict.clear();
+
+		//
+		_closed = true;
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+bool
+CKjServer::IsClosed() {
+	return _closed;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+kj::Promise<void>
+CKjServer::StartAccepLoop(kj::Own<kj::ConnectionReceiver> listener) {
+	return AcceptLoop(kj::mv(listener))
+		.exclusiveJoin(ShutdownWatcher());
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+kj::Promise<void>
+CKjServer::AcceptLoop(kj::Own<kj::ConnectionReceiver>&& listener) {
+	
+	auto ptr = listener.get();
+	return ptr->accept().then(kj::mvCapture(kj::mv(listener),
+		[this](kj::Own<kj::ConnectionReceiver>&& listener, kj::Own<kj::AsyncIoStream>&& stream) {
+		//
+		struct sockaddr_in sin;
+		memset(&sin, 0, sizeof(sin));
+		kj::uint len = sizeof(sin);
+		stream->getpeername((sockaddr *)&sin, &len);
+		std::string sPeerIp = inet_ntoa(sin.sin_addr);
+
+		// create and store tcp stream in dict
+		kj::Own<KjTcpIoStream> tcpStream = kj::heap<KjTcpIoStream>(kj::addRef(*_thr_tioContext), kj::mv(stream));
+		uintptr_t streamptr = tcpStream->GetStreamPtr();
+		_thr_tcpStreamDict.insert(std::make_pair(streamptr, kj::mv(tcpStream)));
+
+		// accept client cb
+		_refConnFactory->AddAcceptClientCb(this, streamptr, sPeerIp);
+
+		// loop
+		return AcceptLoop(kj::mv(listener));
+	}));
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjServer::taskFailed(kj::Exception&& exception) {
+	char chDesc[1024];
+#if defined(__CYGWIN__) || defined( _WIN32)
+	_snprintf_s(chDesc, sizeof(chDesc), "[CKjServer::taskFailed()] desc(%s).\n",
+		exception.getDescription().cStr());
+#else
+	snprintf(chDesc, sizeof(chDesc), "[CKjServer::taskFailed()] desc(%s).\n",
+		exception.getDescription().cStr());
+#endif
+	fprintf(stderr, chDesc);
+}
+
+/** -- EOF -- **/
