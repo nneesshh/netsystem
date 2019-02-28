@@ -6,23 +6,13 @@
 
 #include <assert.h>
 
-#pragma push_macro("ERROR")
-#undef ERROR
-#pragma push_macro("VOID")
-#undef VOID
-
-#include "thirdparty/g/capnp/kj/debug.h"
-
-#pragma pop_macro("ERROR")
-#pragma pop_macro("VOID")
-
 #include "../tcp_def.h"
 
 //------------------------------------------------------------------------------
 /**
 //! ctor & dtor
 */
-KjTcpConnection::KjTcpConnection(kj::Own<KjSimpleThreadIoContext> tioContext, uint64_t connid)
+KjTcpConnection::KjTcpConnection(kj::Own<KjPipeEndpointIoContext> tioContext, uint64_t connid)
 	: _tioContext(kj::mv(tioContext))
 	, _connid(connid) {
 	
@@ -84,7 +74,7 @@ KjTcpConnection::Connect(
 		_addr = kj::mv(addr);
 		return StartConnect();
 	}).exclusiveJoin(DisconnectWatcher());
-	return kj::mv(p1);
+	return p1;
 }
 
 //------------------------------------------------------------------------------
@@ -118,14 +108,15 @@ void
 KjTcpConnection::FlushStream() {
 
 	if (_stream) {
-		try {
+		// flush stream at once
+		/*try {
 			_stream->abortRead();
 			_stream->shutdownWrite();
 		}
 		catch (std::exception& e) {
 			fprintf(stderr, "[KjTcpConnection::FlushStream()] abortRead or shutdownWrite exception -- what(%s)!!!"
 				, e.what());
-		}
+		}*/
 		_stream = nullptr;
 	}
 

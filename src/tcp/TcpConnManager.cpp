@@ -4,8 +4,7 @@
 //------------------------------------------------------------------------------
 #include "TcpConnManager.h"
 
-#include <time.h>
-#include <locale.h>
+#include "../base/MyMacros.h"
 
 #include "tcp_packet_def.h"
 #include "TcpInnerPacket.h"
@@ -89,8 +88,8 @@ CTcpConnManager::OnRemoveClient(ITcpServer *pServer, ITcpClient *pClient) {
 			ITcpClient *pClient2 = it2->second;
 			assert(pClient2 == pClient);
 
-			// dispose to backend through factory
-			pServer->GetConnFactory().DisposeConnection(pClient2);
+			// discard connection to backend through factory
+			pServer->GetConnFactory().ReleaseConnection(pClient2);
 
 			entry._mapClients.erase(it2);
 
@@ -118,7 +117,21 @@ CTcpConnManager::OnRemoveClient(ITcpServer *pServer, ITcpClient *pClient) {
 
 */
 void
-CTcpConnManager::OnRemoveAllClients(ITcpServer *pServer) {
+CTcpConnManager::OnAddIsolated(ITcpIsolated *pIsolated) {
+	
+	uint64_t uConnId = pIsolated->GetConnId();
+	assert(uConnId > 0);
+
+	//
+	_mapIsolated[uConnId] = pIsolated;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CTcpConnManager::ReleaseAllClients(ITcpServer *pServer) {
 
 	uintptr_t serverptr = (uintptr_t)pServer;
 	assert(serverptr > 0);
@@ -138,8 +151,8 @@ CTcpConnManager::OnRemoveAllClients(ITcpServer *pServer) {
 
 			assert(uConnId == pClient->GetConnId());
 
-			// dispose to backend through factory
-			_refConnFactory->DisposeConnection(pClient);
+			// discard connection to backend through factory
+			pServer->GetConnFactory().ReleaseConnection(pClient);
 
 			// recycle connection
 			RecyclerPush(pClient);
@@ -156,7 +169,32 @@ CTcpConnManager::OnRemoveAllClients(ITcpServer *pServer) {
 
 */
 void
-CTcpConnManager::OnDisposeAllClients(ITcpServer *pServer) {
+CTcpConnManager::ReleaseAllIsolateds() {
+
+	for (auto& iter : _mapIsolated) {
+		ITcpIsolated *pIsolated = iter.second;
+
+		// must clear because handler may be released already
+		pIsolated->GetEventManager().ClearAllEventHandlers();
+
+		// stop running
+		pIsolated->Disconnect();
+
+		// discard connection to backend through factory
+		_refConnFactory->ReleaseConnection(pIsolated);
+
+		// recycle connection
+		RecyclerPush(pIsolated);
+	}
+	_mapIsolated.clear();
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CTcpConnManager::DisposeDownStreams(ITcpServer *pServer) {
 
 	uintptr_t serverptr = (uintptr_t)pServer;
 	assert(serverptr > 0);
@@ -186,45 +224,6 @@ CTcpConnManager::OnDisposeAllClients(ITcpServer *pServer) {
 /**
 
 */
-void
-CTcpConnManager::OnAddIsolated(ITcpIsolated *pIsolated) {
-	
-	uint64_t uConnId = pIsolated->GetConnId();
-	assert(uConnId > 0);
-
-	//
-	_mapIsolated[uConnId] = pIsolated;
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
-CTcpConnManager::OnRemoveAllIsolateds() {
-
-	for (auto& iter : _mapIsolated) {
-		ITcpIsolated *pIsolated = iter.second;
-
-		// must clear because handler may be released already
-		pIsolated->GetEventManager().ClearAllEventHandlers();
-
-		// stop running
-		pIsolated->Disconnect();
-
-		// dispose to backend through factory
-		_refConnFactory->DisposeConnection(pIsolated);
-
-		// recycle connection
-		RecyclerPush(pIsolated);
-	}
-	_mapIsolated.clear();
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
 ITcpClient *
 CTcpConnManager::LookupClientByConnId(uint64_t uConnId) {
 
@@ -242,21 +241,9 @@ CTcpConnManager::LookupClientByConnId(uint64_t uConnId) {
 /**
 
 */
-bool
-CTcpConnManager::Recycle() {
-
-	RecyclerPop();
-	SafeRelease();
-	return (_vRecycler.size() > 0);
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
 void
 CTcpConnManager::RecyclerPush(ITcpConn *pConn) {
-	// add to recycle
+	// add to recycler
 	_vRecycler.push_back(pConn);
 }
 
@@ -277,8 +264,8 @@ CTcpConnManager::RecyclerPop() {
 		// (0 == reference count) means thread payload queue is cleaned
 		// disposed means thread is released ok
 		if (!pConn->IsConnected()
-			&& pConn->IsFrontEndClean() // front end reference count = 0
-			&& pConn->IsBackEndClean() // back end reference count = 0
+			&& pConn->IsBackEndClean() // all back end requests are processed by front end now
+			&& pConn->IsFrontEndClean()
 			&& pConn->IsDisposed()
 			&& pConn->IsFlushed()) {
 			//

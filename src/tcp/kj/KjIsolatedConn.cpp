@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../../base/MyMacros.h"
+
 #include "../tcp_packet_def.h"
 #include "../TcpInnerPacket.h"
 
@@ -51,12 +53,12 @@ CKjIsolatedConn::CKjIsolatedConn(uint64_t uConnId, ITcpConnFactory *pFactory)
 /**
 
 */
-CKjIsolatedConn::~CKjIsolatedConn() {
+CKjIsolatedConn::~CKjIsolatedConn() noexcept {
 	// must clear because handler may be released already
 	_eventManager->ClearAllEventHandlers();
 
 #ifdef _VERBOSE_TRACE_
-	StdLog *pLog = _refConnFactory->GetLogHandler();
+	StdLog *pLog = netsystem_get_log();
 	if (pLog)
 		pLog->logprint(LOG_LEVEL_NOTICE, "\n[~CKjIsolatedConn()]: connection is destroyed, connid(%08llu).\n"
 			, _connId);
@@ -97,7 +99,7 @@ CKjIsolatedConn::OnDisconnect() {
 		_eventManager->OnEvent(CONNECTION_DISCONNECTED, this);
 
 		// notice
-		StdLog *pLog = _refConnFactory->GetLogHandler();
+		StdLog *pLog = netsystem_get_log();
 		if (pLog)
 			pLog->logprint(LOG_LEVEL_NOTICE, "\n\t!!!! [CKjIsolatedConn::OnDisconnect()]: connid(%08llu) -- target_IP=(%s) target_port=(%d) !!!!\n",
 				_connId, _sIp.c_str(), _nPort);
@@ -131,11 +133,15 @@ CKjIsolatedConn::OnGotPacket(const uint8_t *buf_in, size_t len) {
 void
 CKjIsolatedConn::OnLowLevelConnect(KjTcpConnection&, uint64_t uConnId) {
 	// connect cb to front end
-	if (!IsConnected())
+	if (!IsConnected()) {
 		_refConnFactory->AddIsolatedConnectCb(this, &_refConnFactory->GetConnManager());
 
+		// used to avoid too many "OnDisconnect()" event -- "OnDisconnect()" event will only after on "OnConnect()" event
+		SetConnectedEventPosted(true);
+	}
+
 	// start read always
-	auto p1 = _thr_tcpConnection->StartReadOp(
+	auto p1 = _thr_tcpStream->StartReadOp(
 		[this](KjTcpConnection&, bip_buf_t& bb) {
 		//
 		OnRawData(bb);
@@ -152,8 +158,12 @@ void
 CKjIsolatedConn::OnLowLevelDisconnect(KjTcpConnection&, uint64_t uConnId) {
 	// disconnect cb to front end
 	// Note: No need to tell main thread if already in [ false == IsConnected() ] state, because isolated never REMOVE by error
-	if (IsConnected())
+	if (IsConnected() || _bConnectedEventPosted) {
 		_refConnFactory->AddIsolatedDisconnectCb(this, &_refConnFactory->GetConnManager());
+
+		// can post "OnDisconnect() event again
+		SetConnectedEventPosted(false);
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -170,14 +180,28 @@ CKjIsolatedConn::DisposeConnection() {
 		SAFE_DELETE(_thr_packet);
 
 		// flush stream
-		FlushConnection();
+		FlushStream();
 
-		// dispose stream
-		_thr_tcpConnection = nullptr;
+		// dispose stream for thread
+		_thr_tcpStream = nullptr;
 
-		// dispose base
-		_thr_tioContext = nullptr;
+		// dispose base for thread
 		_thr_tasks = nullptr;
+		_thr_endpointContext = nullptr;
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjIsolatedConn::FlushStream() {
+	// 
+	if (_thr_tcpStream
+		&& !IsFlushed()) {
+		_thr_tcpStream->FlushStream();
+		SetFlushed(true);
 	}
 }
 
@@ -187,18 +211,8 @@ CKjIsolatedConn::DisposeConnection() {
 */
 void
 CKjIsolatedConn::PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
-
-	std::tuple<uint64_t, uint8_t, std::string, std::string> content = std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody));
-
-	assert(IsReady());
-
-	// stream write maybe trigger exception at once, so we must catch it manually
-	KJ_IF_MAYBE(e, kj::runCatchingExceptions(
-		kj::mvCapture(content, [this](std::tuple<uint64_t, uint8_t, std::string, std::string>&& content) {
-		_thr_packet->Post(std::get<0>(content), std::get<1>(content), std::get<2>(content), std::get<3>(content));
-	}))) {
-		taskFailed(kj::mv(*e));
-	}
+	if (_thr_packet)
+		_thr_packet->Post(std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody)));
 }
 
 //------------------------------------------------------------------------------
@@ -243,8 +257,8 @@ CKjIsolatedConn::Disconnect() {
 
 		OnDisconnect();
 		
-		// flush stream
-		_refConnFactory->IsolatedConnFlush(this);
+		// release
+		_refConnFactory->ReleaseConnection(this);
 	}
 }
 
@@ -258,8 +272,8 @@ CKjIsolatedConn::OnIsolatedError() {
 	_thr_packet->Clear();
 
 	// event -- disconnect
-	if (_thr_tcpConnection) {
-		OnLowLevelDisconnect(*_thr_tcpConnection.get(), _connId);
+	if (_thr_tcpStream) {
+		OnLowLevelDisconnect(*_thr_tcpStream.get(), _connId);
 	}
 
 	// check running
@@ -289,14 +303,14 @@ CKjIsolatedConn::Connect(void *base, std::string& sIp_or_Hostname, unsigned shor
 
 	{
 		// init base
-		_thr_tioContext = kj::addRef(*(KjSimpleThreadIoContext *)base);
-		_thr_tasks = _thr_tioContext->CreateTaskSet(*this);
+		_thr_endpointContext = kj::addRef(*(KjPipeEndpointIoContext *)base);
+		_thr_tasks = netsystem_get_servercore()->NewTaskSet(*this);
 
 		// create tcp connection
-		_thr_tcpConnection = kj::heap<KjTcpConnection>(kj::addRef(*_thr_tioContext), _connId);
+		_thr_tcpStream = kj::heap<KjTcpConnection>(kj::addRef(*_thr_endpointContext), _connId);
 
 		//
-		auto p1 = _thr_tcpConnection->Connect(
+		auto p1 = _thr_tcpStream->Connect(
 			_sIp,
 			_nPort,
 			std::bind(&CKjIsolatedConn::OnLowLevelConnect, this, std::placeholders::_1, std::placeholders::_2),
@@ -336,34 +350,18 @@ CKjIsolatedConn::Reconnect() {
 		SetFlushed(false);
 
 		//
-		if (!_thr_tcpConnection) {
+		if (!_thr_tcpStream) {
 			// create tcp connection
-			_thr_tcpConnection = kj::heap<KjTcpConnection>(kj::addRef(*_thr_tioContext), _connId);
+			_thr_tcpStream = kj::heap<KjTcpConnection>(kj::addRef(*_thr_endpointContext), _connId);
 		}
 
 		// kjisolated conn reconnect
-		_thr_tasks->add(_thr_tcpConnection->Reconnect());
+		_thr_tasks->add(_thr_tcpStream->Reconnect());
 	}
 	else {
 		//
 		fprintf(stderr, "\n\t!!!! [CKjIsolatedConn::Reconnect()]: still in flushing, reconnect abort!!! connected(%d)disposed(%d)flushed(%d), connid(%08llu) -- target_IP=(%s) target_port=(%d)!\n",
 			_bConnected, _bDisposed, _bFlushed, _connId, _sIp.c_str(), _nPort);
-	}
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
-CKjIsolatedConn::FlushConnection() {
-	// flush tcp stream only
-	if (_thr_tcpConnection
-		&& !IsFlushed()) {
-
-		_thr_tcpConnection->FlushStream();
-		
-		SetFlushed(true);
 	}
 }
 
@@ -382,7 +380,7 @@ CKjIsolatedConn::DelayReconnect(int nDelaySeconds) {
 			nDelaySeconds, _bConnected, _bDisposed, _bFlushed, _connId, _sIp.c_str(), _nPort);
 
 		// reconnect delay
-		auto p1 = _thr_tioContext->AfterDelay(nDelaySeconds * kj::SECONDS)
+		auto p1 = _thr_endpointContext->AfterDelay(nDelaySeconds * kj::SECONDS)
 			.then([this]() {
 
 			if (_bDelayReconnecting
@@ -433,18 +431,15 @@ CKjIsolatedConn::taskFailed(kj::Exception&& exception) {
 #endif
 	fprintf(stderr, "%s", chDesc);
 
-	// eval later to avoid destroying self task set
-	auto p1 = _thr_tioContext->EvalForResult(
-		[this]() {
+	// schedule eval later to avoid destroying self task set
+	netsystem_get_servercore()->ScheduleEvalLaterFunc([this]() {
 
-		// force flush stream
-		FlushConnection();
+		// flush stream
+		FlushStream();
 
 		// error
 		OnIsolatedError();
 	});
-	// isolated conn dispose
-	_thr_tioContext->AddTask(kj::mv(p1));
 }
 
 /** -- EOF -- **/

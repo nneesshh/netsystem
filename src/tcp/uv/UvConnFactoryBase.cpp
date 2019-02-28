@@ -4,6 +4,11 @@
 //------------------------------------------------------------------------------
 #include "UvConnFactoryBase.h"
 
+#include "../../base/MyMacros.h"
+#include "../../base/platform_utilities.h"
+
+#include "../../netsystem/RootContextDef.hpp"
+
 #ifdef _MSC_VER
 #ifdef _DEBUG
 #define new   new(_NORMAL_BLOCK, __FILE__,__LINE__)
@@ -14,9 +19,8 @@
 /**
 
 */
-CUvConnFactoryBase::CUvConnFactoryBase(StdLog *pLog)
+CUvConnFactoryBase::CUvConnFactoryBase()
 	: _loopBase(uv_loop_new_())
-	, _refLog(pLog)
 	, _connManager(this) {
 	
 }
@@ -47,11 +51,11 @@ CUvConnFactoryBase::OnInit() {
 void
 CUvConnFactoryBase::OnDelete() {
 	// remove all isolated
-	_connManager.OnRemoveAllIsolateds();
+	_connManager.ReleaseAllIsolateds();
 
 	// remove all clients
 	for (auto& pServer : _vClosedServer) {
-		_connManager.OnRemoveAllClients(pServer);
+		_connManager.ReleaseAllClients(pServer);
 	}
 
 	// wait and recycle
@@ -74,6 +78,24 @@ CUvConnFactoryBase::OnDelete() {
 		SAFE_DELETE(pServer);
 	}
 	_vClosedServer.clear();
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CUvConnFactoryBase::AddIsolatedConnectCb(ITcpIsolated *pIsolated, ITcpConnManager *pConnMgr) {
+
+	StdLog *pLog = netsystem_get_log();
+	if (pLog)
+		pLog->logprint(LOG_LEVEL_NOTICE, "[CUvConnFactoryBase::AddIsolatedConnectCb()] Connect ok -- connid(%08llu)connptr(0x%08Ix).\n",
+			pIsolated->GetConnId(), (uintptr_t)pIsolated);
+
+// 	fprintf(stderr, "[CUvConnFactoryBase::AddIsolatedConnectCb()] Connect ok -- connid(%08llu)connptr(0x%08Ix).\n",
+// 		pIsolated->GetConnId(), (uintptr_t)pIsolated);
+
+	pIsolated->OnConnect();
 }
 
 /* -- EOF -- */

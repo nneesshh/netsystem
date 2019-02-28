@@ -29,8 +29,8 @@ public:
 		time_t tmNow,
 		ONLINE_HANDLE **ppOutAccount);
 
-	virtual void				Unregister(ONLINE_HANDLE& account);
-	virtual void				UnregisterByConnId(uint64_t uConnId);
+	virtual void				Unregister(ONLINE_HANDLE& account, time_t tmNow);
+	virtual void				UnregisterByConnId(uint64_t uConnId, time_t tmNow);
 
 	/** Return online items. */
 	virtual ONLINE_LIST& 		GetOnlineList() {

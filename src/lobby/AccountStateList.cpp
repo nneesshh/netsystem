@@ -7,7 +7,7 @@
 #include <assert.h>
 #include <algorithm>
 
-#include "../common/UsingMyToolkitMini.h"
+#include "../base/cityhash/city.h"
 
 //------------------------------------------------------------------------------
 /**
@@ -41,6 +41,7 @@ CAccountStateList::Alloc() {
 		// initialize
 		memset(accState, 0, sizeof(*accState));
 		accState->keyid = objid;
+		accState->route_table.onoff = ACC_CONNECTION_ONOFF_INIT;
 	}
 	return accState;
 }
@@ -58,6 +59,9 @@ CAccountStateList::Online(ACCOUNT_STATE& accState, uint64_t uConnId, uint64_t uI
 
 	accState.route_table.onoff = ACC_CONNECTION_ONOFF_ONLINE;
 	accState.route_table.onoff_time = tmNow;
+
+	//
+	_szOnlineCount = CalcOnlineCount();
 }
 
 //------------------------------------------------------------------------------
@@ -67,6 +71,11 @@ CAccountStateList::Online(ACCOUNT_STATE& accState, uint64_t uConnId, uint64_t uI
 void
 CAccountStateList::Offline(ACCOUNT_STATE& accState, time_t tmNow) {
 	//
+	if (ACC_CONNECTION_ONOFF_ONLINE == accState.route_table.onoff) {
+		// fast calc online count
+		--_szOnlineCount;
+	}
+
 	accState.route_table.onoff = ACC_CONNECTION_ONOFF_OFFLINE;
 	accState.route_table.onoff_time = tmNow;
 }
@@ -108,9 +117,7 @@ CAccountStateList::KeepAliveByUid(const char *sUid, time_t tmNow) {
 
 */
 void
-CAccountStateList::CheckKeepAlive(int nLostContactToleranceSeconds) {
-	time_t tmNow = time(nullptr);
-
+CAccountStateList::CheckKeepAlive(int nLostContactToleranceSeconds, time_t tmNow) {
 	// walk
 	ACCOUNT_STATE *accState;
 	ACCOUNT_STATE_POOL *pool = &_accountStatePool;
@@ -215,47 +222,11 @@ CAccountStateList::GetByInnerUuid(uint64_t uInnerUuid) {
 /**
 
 */
-size_t
-CAccountStateList::GetOnlineCount() {
-	size_t nCount = 0;
-
-	// walk
-	ACCOUNT_STATE *accState;
-	ACCOUNT_STATE_POOL *pool = &_accountStatePool;
-	OBJECT_POOL_ITERATE_USED_OBJECT_BEGIN(pool, accState) {
-		nCount += (int)(ACC_CONNECTION_ONOFF_ONLINE == accState->route_table.onoff);
-	}
-	OBJECT_POOL_ITERATE_USED_OBJECT_END();
-	return nCount;
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-size_t
-CAccountStateList::GetOfflineCount() {
-	size_t nCount = 0;
-
-	// walk
-	ACCOUNT_STATE *accState;
-	ACCOUNT_STATE_POOL *pool = &_accountStatePool;
-	OBJECT_POOL_ITERATE_USED_OBJECT_BEGIN(pool, accState) {
-		nCount += (int)(ACC_CONNECTION_ONOFF_OFFLINE == accState->route_table.onoff);
-	}
-	OBJECT_POOL_ITERATE_USED_OBJECT_END();
-	return nCount;
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
 void
-CAccountStateList::Kick(unsigned int nIndexId) {
+CAccountStateList::Kick(unsigned int nIndexId, time_t tmNow) {
 	ACCOUNT_STATE *accState = Get(nIndexId);
 	if (accState) {
-		ReleaseInternal(*accState);
+		ReleaseInternal(*accState, tmNow);
 	}
 }
 
@@ -264,10 +235,10 @@ CAccountStateList::Kick(unsigned int nIndexId) {
 
 */
 void
-CAccountStateList::KickByUid(const char *sUid) {
+CAccountStateList::KickByUid(const char *sUid, time_t tmNow) {
 	ACCOUNT_STATE *accState = GetByUid(sUid);
 	if (accState) {
-		ReleaseInternal(*accState);
+		ReleaseInternal(*accState, tmNow);
 	}
 }
 
@@ -276,9 +247,7 @@ CAccountStateList::KickByUid(const char *sUid) {
 
 */
 void
-CAccountStateList::KickOfflineMoreThan(int nOfflineToleranceSeconds, unsigned int nKickNumMax, std::vector<ACCOUNT_STATE *>& vOutKickedList) {
-	time_t tmNow = time(nullptr);
-
+CAccountStateList::KickOfflineMoreThan(int nOfflineToleranceSeconds, unsigned int nKickNumMax, time_t tmNow, std::vector<ACCOUNT_STATE *>& vOutKickedList) {
 	// walk
 	ACCOUNT_STATE *accState;
 	ACCOUNT_STATE_POOL *pool = &_accountStatePool;
@@ -287,7 +256,7 @@ CAccountStateList::KickOfflineMoreThan(int nOfflineToleranceSeconds, unsigned in
 		if (ACC_CONNECTION_ONOFF_OFFLINE == accState->route_table.onoff
 			&& tmNow - accState->route_table.onoff_time >= nOfflineToleranceSeconds) {
 			//
-			ReleaseInternal(*accState);
+			ReleaseInternal(*accState, tmNow);
 
 			//
 			vOutKickedList.push_back(accState);
@@ -303,7 +272,7 @@ CAccountStateList::KickOfflineMoreThan(int nOfflineToleranceSeconds, unsigned in
 
 */
 void
-CAccountStateList::ReleaseInternal(ACCOUNT_STATE& accState) {
+CAccountStateList::ReleaseInternal(ACCOUNT_STATE& accState, time_t tmNow) {
 	uint64_t uUidHash, uConnId, uInnerUuid;
 
 	if (accState.is_ready) {
@@ -337,9 +306,48 @@ CAccountStateList::ReleaseInternal(ACCOUNT_STATE& accState) {
 			}
 		}
 
+		// offline
+		Offline(accState, tmNow);
+
 		// release accState by keyid(objid)
 		_accountStatePool.ReleaseInternal(accState.keyid);
 	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+size_t
+CAccountStateList::CalcOnlineCount() {
+	size_t nCount = 0;
+
+	// walk
+	ACCOUNT_STATE *accState;
+	ACCOUNT_STATE_POOL *pool = &_accountStatePool;
+	OBJECT_POOL_ITERATE_USED_OBJECT_BEGIN(pool, accState) {
+		nCount += (int)(ACC_CONNECTION_ONOFF_ONLINE == accState->route_table.onoff);
+	}
+	OBJECT_POOL_ITERATE_USED_OBJECT_END();
+	return nCount;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+size_t
+CAccountStateList::CalcOfflineCount() {
+	size_t nCount = 0;
+
+	// walk
+	ACCOUNT_STATE *accState;
+	ACCOUNT_STATE_POOL *pool = &_accountStatePool;
+	OBJECT_POOL_ITERATE_USED_OBJECT_BEGIN(pool, accState) {
+		nCount += (int)(ACC_CONNECTION_ONOFF_OFFLINE == accState->route_table.onoff);
+	}
+	OBJECT_POOL_ITERATE_USED_OBJECT_END();
+	return nCount;
 }
 
 /** -- EOF -- **/

@@ -33,22 +33,22 @@ public:
 
 	/** **/
 	virtual void				OnCheckConnection() override {
-		// do some delay
-		if (++_nDelayCount >= 65536) {
-			Recycle();
-			_nDelayCount = 0;
-		}
+		// recycle
+		Recycle();
 	}
 
 	/** **/
 	virtual void				OnAddClient(ITcpServer *pServer, ITcpClient *pClient) override;
 	virtual void				OnRemoveClient(ITcpServer *pServer, ITcpClient *pClient) override;
-	virtual void				OnRemoveAllClients(ITcpServer *pServer) override;
-	virtual void				OnDisposeAllClients(ITcpServer *pServer) override;
 
 	/** **/
 	virtual void				OnAddIsolated(ITcpIsolated *pIsolated) override;
-	virtual void				OnRemoveAllIsolateds() override;
+
+	/** **/
+	virtual void				ReleaseAllClients(ITcpServer *pServer) override;
+	virtual void				ReleaseAllIsolateds() override;
+
+	virtual void				DisposeDownStreams(ITcpServer *pServer) override;
 
 	/** **/
 	virtual ITcpClient *		LookupClientByConnId(uint64_t uConnId) override;
@@ -67,7 +67,12 @@ public:
 		return _uNextId;
 	}
 
-	virtual bool				Recycle() override;
+	virtual bool				Recycle() override {
+		//
+		RecyclerPop();
+		SafeRelease();
+		return (_vRecycler.size() > 0);
+	}
 
 private:
 	void						RecyclerPush(ITcpConn *pConn);
@@ -83,7 +88,6 @@ private:
 
 	//!
 	uint64_t _uNextId = TCP_CONNID_BASE;
-	int _nDelayCount = 0;
 
 	//!
 	std::unordered_map<uintptr_t, tcp_conn_manager_server_entry_t > _mapServerEntry; // pointer 2 server_entry

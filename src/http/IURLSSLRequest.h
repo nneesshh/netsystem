@@ -1,12 +1,10 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class IURLRequest
+	@class IURLRequest
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
-#include "../common/UsingMyToolkitMini.h"
-
 typedef size_t(*ssl_write_callback)(
 	char *buffer,
 	size_t size,

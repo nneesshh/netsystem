@@ -13,7 +13,7 @@
 */
 class ITcpClient : public ITcpConn {
 public:
-	virtual ~ITcpClient() noexcept(false) { }
+	virtual ~ITcpClient() noexcept { }
 
 public:
 	/** **/

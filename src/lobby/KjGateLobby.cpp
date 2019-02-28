@@ -20,9 +20,9 @@
 /**
 
 */
-CKjGateLobby::CKjGateLobby(unsigned short nPort, StdLog *pLog)
+CKjGateLobby::CKjGateLobby(unsigned short nPort)
 	: _port(nPort)
-	, _tcpConnFactory(new CKjGateConnFactory(pLog))
+	, _tcpConnFactory(new CKjGateConnFactory())
 	, _zoneManager(new CSimpleZoneManager())
 	, _accountManager(new CSimpleAccountManager()) {
 

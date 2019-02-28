@@ -10,13 +10,6 @@
 # endif
 #endif
 
-#ifdef _WIN32
-#pragma comment(lib, "IPHlpApi.Lib")
-#pragma comment(lib, "Wldap32.Lib")
-#pragma comment(lib, "Psapi.Lib")
-#pragma comment(lib, "UserEnv.Lib")
-#endif
-
 #ifdef _MSC_VER
 #ifdef _DEBUG
 #define new   new(_NORMAL_BLOCK, __FILE__,__LINE__)
@@ -24,14 +17,14 @@
 #endif
 
 extern "C" {
-	MY_EXTERN INetSystem *
-		GetPlugin() {
-		return new CNetSystem();
+	MY_NETSYSTEM_EXTERN INetSystem *
+		GetPlugin(void *servercore) {
+		return new CNetSystem(servercore);
 	}
 
-	MY_EXTERN INetSystem *
-		GetClass() {
-		return GetPlugin();
+	MY_NETSYSTEM_EXTERN INetSystem *
+		GetClass(void *servercore) {
+		return GetPlugin(servercore);
 	}
 }
 

@@ -4,11 +4,7 @@
 //------------------------------------------------------------------------------
 #include "NetSystem.h"
 
-#include "../http/ev/EvHttpServer.h"
-#include "../http/ev/LibevhtpServer.h"
-
-#include "../http/libcurl/CURLHttp.h"
-#include "../http/libcurl/CURLSSL.h"
+#include "RootContextDef.hpp"
 
 #if (NETSYSTEM_MT >= 0)
 #include "../lobby/KjLobby.h"
@@ -19,6 +15,12 @@
 #include "../lobby/UvGateLobby.h"
 #include "../lobby/UvNullLobby.h"
 #endif
+
+#include "../http/ev/EvHttpServer.h"
+#include "../http/ev/LibevhtpServer.h"
+
+#include "../http/libcurl/CURLHttp.h"
+#include "../http/libcurl/CURLSSL.h"
 
 #ifdef _MSC_VER
 #ifdef _DEBUG
@@ -35,18 +37,10 @@ default_stats_cb(int, int, int, int) {
 /**
 
 */
-CNetSystem::CNetSystem()
-	: _stats_cb(default_stats_cb)
-	, _isLobbyReady(false)
-	, _lobby(nullptr) {
-
-#ifdef WIN32
-	WSADATA WSAData;
-	DWORD Ret;
-	if ((Ret = WSAStartup(MAKEWORD(2, 2), &WSAData)) != 0) {
-		fprintf(stderr, "WSAStartup failed with error %d!\n", Ret);
-	}
-#endif
+CNetSystem::CNetSystem(void *servercore)
+	: _stats_cb(default_stats_cb) {
+	//
+	netsystem_init_servercore(servercore);
 
 	//
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -60,17 +54,30 @@ CNetSystem::~CNetSystem() {
 	SAFE_DELETE(_lobby);
 
 	//
+	netsystem_cleanup_servercore();
+
+	//
 	curl_global_cleanup();
 
 	//
 	google::protobuf::ShutdownProtobufLibrary();
+}
 
-#ifdef WIN32
-	DWORD Ret;
-	if ((Ret = WSACleanup()) != 0) {
-		fprintf(stderr, "WSACleanup failed with error %d!!!\n", Ret);
-	}
-#endif
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CNetSystem::OnUpdate() {
+	//
+	_lobby->OnUpdate();
+
+	//
+	_stats_cb(
+		_lobby->GetTcpConnFactory().GetConnManager().GetClientCount(),
+		_lobby->GetAccountManager().GetOnlineList().GetOnlineCount(),
+		CTcpConnManager::s_recv,
+		CTcpConnManager::s_send);
 }
 
 //------------------------------------------------------------------------------
@@ -78,11 +85,12 @@ CNetSystem::~CNetSystem() {
 
 */
 int
-CNetSystem::Init(LOBBY_TYPE eType, unsigned int port, StdLog *pLog, const std::function<void(int, int, int, int)> stats_cb) {
+CNetSystem::Init(LOBBY_TYPE eType, unsigned int port, const std::function<void(int, int, int, int)> stats_cb) {
 	// notice
+	StdLog *pLog = netsystem_get_log();
 	if (pLog)
 		pLog->logprint(LOG_LEVEL_NOTICE, "\n[CNetSystem::Init()] port(%d) type(%d)...\n",
-		port, eType);
+			port, eType);
 
 	if (stats_cb)
 		_stats_cb = stats_cb;
@@ -95,48 +103,18 @@ CNetSystem::Init(LOBBY_TYPE eType, unsigned int port, StdLog *pLog, const std::f
 
 	case LOBBY_TYPE_TCP_SERVER: {
 		// lobby with server
-		return InitLobby(port, pLog);
+		return InitLobby(port);
 	}
 
 	case LOBBY_TYPE_GATE_TCP_SERVER: {
 		// lobby with gate server
-		return InitGateLobby(port, pLog);
+		return InitGateLobby(port);
 	}
 
 	default:
 		break;
 	}
 	return -1;
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
-CNetSystem::Dispose() {
-	//
-	_stats_cb = default_stats_cb;
-
-	// wait all message send.
-	DisposeLobby();
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
-CNetSystem::Update() {
-	//
-	_lobby->OnUpdate();
-
-	//
-	_stats_cb(
-		_lobby->GetTcpConnFactory().GetConnManager().GetClientCount(),
-		_lobby->GetAccountManager().GetOnlineList().GetOnlineCount(),
-		CTcpConnManager::s_recv,
-		CTcpConnManager::s_send);
 }
 
 //------------------------------------------------------------------------------
@@ -181,6 +159,19 @@ CNetSystem::OpenURLSSLRequest() {
 /**
 
 */
+void
+CNetSystem::Shutdown() {
+	//
+	_stats_cb = default_stats_cb;
+
+	// wait all message send???
+	DisposeLobby();
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
 int
 CNetSystem::InitNullLobby() {
 #if (NETSYSTEM_MT >= 0)
@@ -200,11 +191,11 @@ CNetSystem::InitNullLobby() {
 
 */
 int
-CNetSystem::InitLobby(unsigned short nPort, StdLog *pLog) {
+CNetSystem::InitLobby(unsigned short nPort) {
 #if (NETSYSTEM_MT >= 0)
-	_lobby = new CKjLobby(nPort, pLog);
+	_lobby = new CKjLobby(nPort);
 #else
-	_lobby = new CUvLobby(nPort, pLog);
+	_lobby = new CUvLobby(nPort);
 #endif
 	if (0 == _lobby->OnInit()) {
 		_isLobbyReady = true;
@@ -218,11 +209,11 @@ CNetSystem::InitLobby(unsigned short nPort, StdLog *pLog) {
 
 */
 int
-CNetSystem::InitGateLobby(unsigned short nPort, StdLog *pLog) {
+CNetSystem::InitGateLobby(unsigned short nPort) {
 #if (NETSYSTEM_MT >= 0)
-	_lobby = new CKjGateLobby(nPort, pLog);
+	_lobby = new CKjGateLobby(nPort);
 #else
-	_lobby = new CUvGateLobby(nPort, pLog);
+	_lobby = new CUvGateLobby(nPort);
 #endif
 	if (0 == _lobby->OnInit()) {
 		_isLobbyReady = true;

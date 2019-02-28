@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string>
 
+#include "../../base/MyMacros.h"
+
 #include "../tcp_packet_def.h"
 #include "../TcpInnerPacket.h"
 
@@ -39,7 +41,7 @@ on_stream_close(uv_handle_t* handle) {
 /**
 
 */
-CUvClientConn::CUvClientConn(uint64_t uConnId, const std::string& sPeerIp, ITcpServer *pServer)
+CUvClientConn::CUvClientConn(uint64_t uConnId, std::string&& sPeerIp, ITcpServer *pServer)
 	: _connId(uConnId)
 	, _peerIp(std::move(sPeerIp))
 	, _refServer(pServer) {
@@ -128,13 +130,25 @@ CUvClientConn::DisposeConnection() {
 		SAFE_DELETE(_packet);
 
 		// flush stream
-		if (_clnt
-			&& _clnt->_sockimpl
-			&& !IsFlushed()) {
-			
-			uv_close_((uv_handle_t *)_clnt->_sockimpl, on_stream_close);
-			_clnt->_sockimpl = nullptr;
-		}
+		FlushStream();
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CUvClientConn::FlushStream() {
+	//
+	if (_clnt
+		&& _clnt->_sockimpl
+		&& !IsFlushed()) {
+
+		uv_close_((uv_handle_t *)_clnt->_sockimpl, on_stream_close);
+		_clnt->_sockimpl = nullptr;
+
+		SetFlushed(true);
 	}
 }
 
@@ -144,10 +158,8 @@ CUvClientConn::DisposeConnection() {
 */
 void
 CUvClientConn::PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
-
-	assert(IsReady());
-
-	_packet->Post(uInnerUuid, uSerialNo, sTypeName, sBody);
+	if (_packet)
+		_packet->Post(std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody)));
 }
 
 //------------------------------------------------------------------------------

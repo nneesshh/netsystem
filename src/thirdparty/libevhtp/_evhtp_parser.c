@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "internal.h"
 #include "evhtp/parser.h"
 #include "evhtp/config.h"
-#include "log.h"
 
 #if '\n' != '\x0a' || 'A' != 65
 #error "You have somehow found a non-ASCII host. We can't build here."
@@ -388,10 +388,11 @@ str_to_uint64(char * str, size_t n, int * err)
     return value;
 }
 
-static inline int
+typedef int ssize_t;
+static inline ssize_t
 _str_to_ssize_t(char * str, size_t n)
 {
-    int value;
+    ssize_t value;
 
     if (n == 0)
     {

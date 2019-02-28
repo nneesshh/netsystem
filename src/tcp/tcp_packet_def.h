@@ -5,7 +5,6 @@
     
     (C) 2016 n.lee
 */
-#include <stdlib.h>
 #include <stdint.h>
 
 #include "tcp_def.h"
@@ -41,30 +40,34 @@ struct packet_buffer_t {
 
 #pragma pack(1)
 
-// frame_page = frame_page_leading + page
-// packet = page1 + page2 + ... = packet_leading + name + data
+// full_packet = frame_page1 + frame_page2 + ... 
+// frame_page = frame_page_leading + page(first_page/non-first_page)
+// first_page = packet_leading + name + data
+// non-first_page = data
+
 #define PER_FRAME_PAGE_SIZE_MAX		TCP_STREAM_READ_SIZE
 #define FULL_PACKET_MAX_SIZE_HINT	0xF0000	// 0x40000, 256k, 262144? 0x80000, 512k, 524288? 0xF0000, 960K, 983040? include frame page header and packet buffer entry header, ...
 
 #define	SIZE_OF_FRAME_PAGE_LEADING	2
 struct tcp_frame_page_leading_t {
-	uint16_t page_start : 1; // 1 = first page, 0 = more pages after first page
-	uint16_t page_end : 1; // 1 = first page, 0 = more pages after first page
-	uint16_t data_size : 14; // page data size
+	uint16_t page_start:1; // 1 = first page, 0 = more pages after first page
+	uint16_t page_end:1; // 1 = first page, 0 = more pages after first page
+	uint16_t data_size:14; // page data size
 };
 
 #define SIZE_OF_TCP_OUTER_PACKET_LEADING	2 // sizeof(tcp_outer_packet_leading_t)
 struct tcp_outer_packet_leading_t {
-	uint16_t	name_len : 8; // 256
-	uint16_t	serial_no : 8;
+	uint16_t name_len:8; // 256
+	uint16_t serial_no:8;
 };
 
 #define SIZE_OF_TCP_INNER_PACKET_LEADING	16 // sizeof(tcp_inner_packet_leading_t)
 struct tcp_inner_packet_leading_t {
-	uint64_t	inner_name_len : 8; // 256
-	uint64_t	inner_serial_no : 8;
-	uint64_t	: 0; // skip
-	uint64_t	inner_uuid;
+	uint32_t inner_name_len:8; // 256
+	uint32_t inner_serial_no:8;
+	uint32_t _1:16; // skip
+	uint32_t _2; // skip
+	uint64_t inner_uuid;
 };
 
 #pragma pack()

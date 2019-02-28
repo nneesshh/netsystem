@@ -4,11 +4,6 @@
 //------------------------------------------------------------------------------
 #include "SimpleZoneManager.h"
 
-#include <time.h>
-#include <locale.h>
-
-#include "../common/UsingMyToolkitMini.h"
-
 #ifdef _MSC_VER
 #ifdef _DEBUG
 #define new   new(_NORMAL_BLOCK, __FILE__,__LINE__)

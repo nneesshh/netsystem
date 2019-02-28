@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string>
 
+#include "../../base/MyMacros.h"
+
 #include "../tcp_packet_def.h"
 #include "../TcpInnerPacket.h"
 
@@ -25,7 +27,7 @@
 /**
 
 */
-CKjClientConn::CKjClientConn(uint64_t uConnId, const std::string& sPeerIp, ITcpServer *pServer)
+CKjClientConn::CKjClientConn(uint64_t uConnId, std::string&& sPeerIp, ITcpServer *pServer)
 	: _connId(uConnId)
 	, _peerIp(std::move(sPeerIp))
 	, _refServer(pServer) {
@@ -36,7 +38,7 @@ CKjClientConn::CKjClientConn(uint64_t uConnId, const std::string& sPeerIp, ITcpS
 /**
 
 */
-CKjClientConn::~CKjClientConn() {
+CKjClientConn::~CKjClientConn() noexcept {
 	_refServer = nullptr;
 }
 
@@ -107,20 +109,28 @@ CKjClientConn::DisposeConnection() {
 		SAFE_DELETE(_thr_packet);
 
 		// flush stream
-		if (_thr_tcpStream
-			&& !IsFlushed()) {
+		FlushStream();
 
-			_thr_tcpStream->Disconnect();
-
-			SetFlushed(true);
-		}
-
-		// dispose stream
+		// dispose stream for thread
 		_thr_tcpStream = nullptr;
 
-		// dispose base
-		_thr_tioContext = nullptr;
+		// dispose base for thread
 		_thr_tasks = nullptr;
+		_thr_endpointContext = nullptr;
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjClientConn::FlushStream() {
+	// 
+	if (_thr_tcpStream
+		&& !IsFlushed()) {
+		_thr_tcpStream->FlushStream();
+		SetFlushed(true);
 	}
 }
 
@@ -130,16 +140,8 @@ CKjClientConn::DisposeConnection() {
 */
 void
 CKjClientConn::PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
-
-	assert(IsReady());
-
-	std::tuple<uint64_t, uint8_t, std::string, std::string> content = std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody));
-	KJ_IF_MAYBE(e, kj::runCatchingExceptions(
-		kj::mvCapture(content, [this](std::tuple<uint64_t, uint8_t, std::string, std::string>&& content) {
-		_thr_packet->Post(std::get<0>(content), std::get<1>(content), std::get<2>(content), std::get<3>(content));
-	}))) {
-		taskFailed(kj::mv(*e));
-	}
+	if (_thr_packet)
+		_thr_packet->Post(std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody)));
 }
 
 //------------------------------------------------------------------------------
@@ -195,12 +197,14 @@ CKjClientConn::Disconnect() {
 void
 CKjClientConn::ConfirmClientIsReady(void *base, uintptr_t streamptr) {
 
+	//fprintf(stderr, "[CKjClientConn::ConfirmClientIsReady()] confirm client is ready 1111111111111111++++++++++++++++++++++++++++++++\n");
+
 	CKjServer *pServer = static_cast<CKjServer *>(_refServer);
 	_thr_tcpStream = pServer->RemoveStream(streamptr);
 	if (_thr_tcpStream) {
 		// init base
-		_thr_tioContext = kj::addRef(*(KjSimpleThreadIoContext *)base);
-		_thr_tasks = _thr_tioContext->CreateTaskSet(*this);
+		_thr_endpointContext = kj::addRef(*(KjPipeEndpointIoContext *)base);
+		_thr_tasks = netsystem_get_servercore()->NewTaskSet(*this);
 
 		// init packet
 		if (nullptr == _thr_packet) {
@@ -208,9 +212,11 @@ CKjClientConn::ConfirmClientIsReady(void *base, uintptr_t streamptr) {
 			_thr_packet->SetGotPacketCb(std::bind(&CKjClientConn::OnGotPacket, this, std::placeholders::_1, std::placeholders::_2));
 		}
 
+		//fprintf(stderr, "[CKjClientConn::ConfirmClientIsReady()] start read op 2222222222222222++++++++++++++++++++++++++++++++\n");
+
 		// start read
 		auto p1 = _thr_tcpStream->StartReadOp(
-			[this](KjTcpIoStream&, bip_buf_t& bb) {
+			[this](KjTcpDownStream&, bip_buf_t& bb) {
 			//
 			OnRawData(bb);
 		});
@@ -226,23 +232,17 @@ CKjClientConn::ConfirmClientIsReady(void *base, uintptr_t streamptr) {
 */
 void
 CKjClientConn::taskFailed(kj::Exception&& exception) {
-	// eval later to avoid destroying self task set
 	CKjServer *pServer = static_cast<CKjServer *>(_refServer);
-	auto p1 = pServer->_thr_tioContext->EvalForResult(
-		[this]() {
+
+	// schedule eval later to avoid destroying self task set
+	netsystem_get_servercore()->ScheduleEvalLaterFunc([this]() {
 
 		// flush stream
-		if (_thr_tcpStream
-			&& !IsFlushed()) {
+		FlushStream();
 
-			_thr_tcpStream->Disconnect();
-
-			SetFlushed(true);
-		}
+		//
 		_refServer->OnDisposeClient(this);
 	});
-	// server dispose client
-	pServer->_thr_tasks->add(kj::mv(p1));
 }
 
 /** -- EOF -- **/

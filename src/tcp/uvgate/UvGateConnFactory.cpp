@@ -13,6 +13,8 @@
 #include "UvGateIsolatedConn.h"
 #include "UvGateIsolatedConn2.h"
 
+#include "../../netsystem/RootContextDef.hpp"
+
 #ifdef _MSC_VER
 #ifdef _DEBUG
 #define new   new(_NORMAL_BLOCK, __FILE__,__LINE__)
@@ -23,8 +25,8 @@
 /**
 
 */
-CUvGateConnFactory::CUvGateConnFactory(StdLog *pLog)
-	: CUvConnFactoryBase(pLog) {
+CUvGateConnFactory::CUvGateConnFactory()
+	: CUvConnFactoryBase() {
 
 }
 
@@ -52,9 +54,9 @@ CUvGateConnFactory::CreateTcpServer() {
 
 */
 ITcpClient *
-CUvGateConnFactory::CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) {
+CUvGateConnFactory::CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) {
 	uint64_t uConnId = _connManager.GetNextConnectionId();
-	ITcpClient *pClient = new CUvGateClientConn(uConnId, sPeerIp, pServer);
+	ITcpClient *pClient = new CUvGateClientConn(uConnId, std::move(sPeerIp), pServer);
 	_connManager.OnAddClient(pServer, pClient);
 	return pClient;
 }

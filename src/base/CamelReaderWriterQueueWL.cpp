@@ -4,23 +4,12 @@
 //------------------------------------------------------------------------------
 #include "CamelReaderWriterQueueWL.h"
 
+#include "platform_utilities.h"
+
 #ifdef _WIN32
 # define WIN32_LEAN_AND_MEAN 1
 # include <windows.h>
 #endif
-
-static void
-util_sleep(unsigned int milliseconds) {
-#if defined(WIN32) || defined(_WIN32)
-	Sleep(milliseconds);
-#else
-	int seconds = milliseconds / 1000;
-	int useconds = (milliseconds % 1000) * 1000;
-
-	sleep(seconds);
-	usleep(useconds);
-#endif
-}
 
 #ifdef _DEBUG
 # define RWQUEUE_CONSUME_WATERLINE	128

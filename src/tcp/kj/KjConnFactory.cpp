@@ -23,8 +23,8 @@
 /**
 
 */
-CKjConnFactory::CKjConnFactory(StdLog *pLog)
-	: CKjConnFactoryBase(pLog) {
+CKjConnFactory::CKjConnFactory()
+	: CKjConnFactoryBase() {
 
 }
 
@@ -52,9 +52,9 @@ CKjConnFactory::CreateTcpServer() {
 
 */
 ITcpClient *
-CKjConnFactory::CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) {
+CKjConnFactory::CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) {
 	uint64_t uConnId = _connManager.GetNextConnectionId();
-	ITcpClient *pClient = new CKjClientConn(uConnId, sPeerIp, pServer);
+	ITcpClient *pClient = new CKjClientConn(uConnId, std::move(sPeerIp), pServer);
 	_connManager.OnAddClient(pServer, pClient);
 	return pClient;
 }

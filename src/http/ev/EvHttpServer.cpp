@@ -125,9 +125,9 @@ done:
 /**
 
 */
-CEvHttpServer::CEvHttpServer(unsigned short nPort, StdLog *pLog)
-	: _closed(false)
-	, _refLog(pLog) {
+CEvHttpServer::CEvHttpServer(unsigned short nPort)
+	: _closed(false) {
+
 	memset(&_srvr, 0, sizeof(struct evhttp_server));
 
 	_srvr._fd = 0;
@@ -185,6 +185,24 @@ CEvHttpServer::OnUpdate() {
 
 */
 void
+CEvHttpServer::Close() {
+	ev_httpd_exit(&_srvr);
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+bool
+CEvHttpServer::IsClosed() {
+	return _closed;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
 CEvHttpServer::SendReply(void *req_handle, int code, const char *reason, const char *str) {
 	SendReply(req_handle, code, reason, str, strlen(str));
 }
@@ -218,18 +236,10 @@ CEvHttpServer::SendReply(void *req_handle, int code, const char *reason, const c
 /**
 
 */
-void
-CEvHttpServer::Close() {
-	ev_httpd_exit(&_srvr);
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
 bool
-CEvHttpServer::IsClosed() {
-	return _closed;
+CEvHttpServer::ParseQueryString(void *req_handle, std::string& outQueyString) {
+	// todo
+	return false;
 }
 
 /** -- EOF -- **/

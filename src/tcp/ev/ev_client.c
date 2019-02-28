@@ -177,12 +177,12 @@ ev_connect_(struct event_base *base, const char *ip, unsigned short port,
 *
 */
 int
-ev_real_connect_(
-	client_handle_t *clnt,
+ev_real_connect_(client_handle_t *clnt,
 	struct event_base *base,
 	bufferevent_data_cb on_recv,
 	bufferevent_data_cb on_send,
 	bufferevent_event_cb on_error) {
+
 	/* create the buffered event. */
 	struct bufferevent *sockimpl = bufferevent_socket_new(base, -1, BEV_OPT_CLOSE_ON_FREE);
 	if (sockimpl) {

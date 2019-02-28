@@ -7,16 +7,16 @@
 extern "C" {
 #endif
 
-typedef uint8_t     u8;
-typedef int8_t      s8;
-typedef uint16_t    u16;
-typedef int16_t     s16;
-typedef uint32_t    u32;
-typedef int32_t     s32;
-typedef uint64_t    u64;
-typedef int64_t     s64;
+	typedef uint8_t     u8;
+	typedef int8_t      s8;
+	typedef uint16_t    u16;
+	typedef int16_t     s16;
+	typedef uint32_t    u32;
+	typedef int32_t     s32;
+	typedef uint64_t    u64;
+	typedef int64_t     s64;
 
-/* DLLs in Windows should use the standard (Pascal) calling convention */
+	/* DLLs in Windows should use the standard (Pascal) calling convention */
 #ifndef MYAPI_CALL
 #if defined(WIN32) || defined(_WIN32)
 #define MYAPI_CALL __stdcall
@@ -25,18 +25,18 @@ typedef int64_t     s64;
 #endif
 #endif
 
-/* Export functions from the DLL */
+	/* Export functions from the DLL */
 #ifndef MY_EXTERN
 # if defined(WIN32) || defined(_WIN32)
-  /* Windows - set up dll import/export decorators. */
+	/* Windows - set up dll import/export decorators. */
 #  if defined(MY_BUILDING_SHARED)
-   /* Building shared library. */
+	/* Building shared library. */
 #   define MY_EXTERN __declspec(dllexport)
 #  elif defined(MY_USING_SHARED)
-    /* Using shared library. */
+	/* Using shared library. */
 #   define MY_EXTERN __declspec(dllimport)
 #  else
-    /* Building static library. */
+	/* Building static library. */
 #    define MY_EXTERN /* nothing */
 #  endif
 # elif __GNUC__ >= 4

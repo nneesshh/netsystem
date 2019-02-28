@@ -8,13 +8,11 @@
 #ifdef __cplusplus 
 extern "C" {
 #endif 
-	struct http_thr_aux;
-	typedef struct http_thr_aux http_thr_aux_t;
-	struct http_thr_aux {
+	typedef struct http_thr_aux_s {
 		int _thr_fd;
 		void *_thr_base;
 		void *_thr_userdata;
-	};
+	} http_thr_aux_t;
 
 
 #ifdef __cplusplus 

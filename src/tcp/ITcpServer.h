@@ -5,7 +5,8 @@
     
     (C) 2016 n.lee
 */
-#include "../common/UsingMyToolkitMini.h"
+#include <stdint.h>
+#include <string>
 
 class ITcpConnFactory;
 class ITcpEventManager;
@@ -17,17 +18,20 @@ class ITcpClient;
 */
 class ITcpServer {
 public:
-	virtual ~ITcpServer() noexcept(false) { }
+	virtual ~ITcpServer() noexcept { }
 
 	/** Server accept and dispose client */
-	virtual ITcpClient *		OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp) = 0;
+	virtual ITcpClient *		OnAcceptClient(uintptr_t streamptr, std::string&& sPeerIp) = 0;
 	virtual void				OnDisposeClient(ITcpClient *pClient) = 0;
 
 public:
 	/** Open and close **/
 	virtual int					Open(void *base, unsigned short port) = 0;
 	virtual void				Close() = 0;
+	virtual void				FlushDownStream(uintptr_t streamptr) = 0;
+
 	virtual bool				IsClosed() = 0;
+	virtual bool				IsReady() = 0;
 
 	/** **/
 	virtual void *				GetBase() = 0;

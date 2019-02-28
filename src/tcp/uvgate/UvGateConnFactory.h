@@ -13,12 +13,12 @@
 */
 class CUvGateConnFactory : public CUvConnFactoryBase {
 public:
-	CUvGateConnFactory(StdLog *pLog);
+	CUvGateConnFactory();
 	virtual ~CUvGateConnFactory();
 
 	/** **/
 	virtual ITcpServer *		CreateTcpServer() override;
-	virtual ITcpClient *		CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) override;
+	virtual ITcpClient *		CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) override;
 
 	/** **/
 	virtual ITcpIsolated *		CreateTcpIsolated() override;

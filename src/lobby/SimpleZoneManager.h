@@ -9,7 +9,7 @@
 #include <map>
 #include <vector>
 
-#include "../common/UsingMyToolkitMini.h"
+#include "../UsingBase.h"
 
 #include "IZoneManager.h"
 

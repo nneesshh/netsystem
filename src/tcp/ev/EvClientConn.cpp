@@ -25,7 +25,7 @@
 /**
 
 */
-CEvClientConn::CEvClientConn(uint64_t uConnId, const std::string& sPeerIp, ITcpServer *pServer)
+CEvClientConn::CEvClientConn(uint64_t uConnId, std::string&& sPeerIp, ITcpServer *pServer)
 	: _connId(uConnId)
 	, _peerIp(std::move(sPeerIp))
 	, _refServer(pServer) {
@@ -114,15 +114,25 @@ CEvClientConn::DisposeConnection() {
 		SAFE_DELETE(_packet);
 
 		// flush stream
-		if (_clnt
-			&& _clnt->_sockimpl
-			&& !IsFlushed()) {
-			
-			ev_close_((struct bufferevent *)_clnt->_sockimpl);
-			_clnt->_sockimpl = nullptr;
-			
-			SetFlushed(true);
-		}
+		FlushStream();
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CEvClientConn::FlushStream() {
+	//
+	if (_clnt
+		&& _clnt->_sockimpl
+		&& !IsFlushed()) {
+
+		ev_close_((struct bufferevent *)_clnt->_sockimpl);
+		_clnt->_sockimpl = nullptr;
+
+		SetFlushed(true);
 	}
 }
 
@@ -132,10 +142,8 @@ CEvClientConn::DisposeConnection() {
 */
 void
 CEvClientConn::PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
-
-	assert(IsReady());
-
-	_packet->Post(uInnerUuid, uSerialNo, sTypeName, sBody);
+	if (_packet)
+		_packet->Post(std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody)));
 }
 
 //------------------------------------------------------------------------------

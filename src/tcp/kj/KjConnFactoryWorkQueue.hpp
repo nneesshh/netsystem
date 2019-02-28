@@ -1,25 +1,23 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class CKjConnFactoryWorkQueue
+	@class CKjConnFactoryWorkQueue
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
 #include <string>
 #include <vector>
-#include <deque>
-#include <mutex>
-#include <thread>
+#include <stdint.h>
+
+#include "servercore/base/IServerCore.h"
 
 #include "base/concurrent/readerwriterqueue.h"
 
-#include "KjSimpleIoContext.hpp"
-#include "KjSimpleThreadIoContext.hpp"
-
-#include "../ITcpConnFactory.h"
 #include "../ITcpServer.h"
 #include "../ITcpClient.h"
 #include "../ITcpIsolated.h"
+
+class CKjConnFactoryBase;
 
 //------------------------------------------------------------------------------
 /**
@@ -27,7 +25,7 @@
 */
 class CKjConnFactoryWorkQueue : public kj::TaskSet::ErrorHandler {
 public:
-	explicit CKjConnFactoryWorkQueue(ITcpConnFactory *pFactory, kj::Own<KjSimpleIoContext> rootContext);
+	explicit CKjConnFactoryWorkQueue(CKjConnFactoryBase *pFactory);
 	~CKjConnFactoryWorkQueue();
 
 	using result_cb_t = std::function<void(int)>;
@@ -39,12 +37,12 @@ public:
 			CLOSE_TCP_SERVER = 2,
 			DISPOSE_CONNECTION = 3,
 			POST_PACKET = 4,
+			FLUSH_TCP_SERVER_DOWNSTREAM = 5,
 
 			CONFIRM_CLIENT_IS_READY = 11,
 			POST_BROADCAST_PACKET = 12,
 
 			ISOLATED_CONN_CONNECT = 21,
-			ISOLATED_FLUSH_STREAM = 22,
 			ISOLATED_DELAY_RECONNECT = 23,
 		};
 
@@ -75,6 +73,8 @@ public:
 	};
 	using CallbackEntry = net_cmd_t;
 
+	void						Run(svrcore_pipeworker_t *worker);
+
 	bool Add(net_cmd_t&& cmd);
 
 	bool IsDone() {
@@ -89,20 +89,19 @@ public:
 
 	int OpenTcpServer(ITcpServer *pServer, unsigned short nPort);
 	void CloseTcpServer(ITcpServer *pServer);
+	void FlushTcpServerDownStream(ITcpServer *pServer, uintptr_t streamptr);
+
 	void DisposeConnection(ITcpConn *pConn);
-	void PostPacket(ITcpConn *pConn, uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody);
+	void PostPacket(ITcpConn *pConn, uint64_t uInnerUuid, uint8_t uSerialNo, std::string&& sTypeName, std::string&& sBody);
 
 	void ConfirmClientIsReady(ITcpClient *pClient, uintptr_t streamptr);
-	void PostBroadcastPacket(ITcpServer *pServer, std::vector<uint64_t>& vTarget, std::string& sTypeName, std::string& sBody);
+	void PostBroadcastPacket(ITcpServer *pServer, std::vector<uint64_t>& vTarget, std::string&& sTypeName, std::string&& sBody);
 
 	int IsolatedConnConnect(ITcpIsolated *pIsolated, std::string sIp_or_Hostname, unsigned short nPort);
-	void IsolatedConnFlush(ITcpIsolated *pIsolated);
 	void IsolatedConnDelayReconnect(ITcpIsolated *pIsolated, int nDelaySeconds);
 
 private:
 	void InitTasks();
-	void Start();
-	void Run(kj::AsyncIoProvider& ioProvider, kj::AsyncIoStream& stream, kj::WaitScope& waitScope);
 
 	void Commit(
 		net_cmd_t::CMD_TYPE eType,
@@ -154,18 +153,15 @@ private:
 	void taskFailed(kj::Exception&& exception) override;
 
 private:
-	ITcpConnFactory *_refConnFactory;
-	kj::Own<KjSimpleIoContext> _rootContext;
+	CKjConnFactoryBase *_refConnFactory;
 
-	bool _done = false;
+	volatile bool _done = false;
+	volatile bool _finished = false;
 	moodycamel::ReaderWriterQueue<CallbackEntry> _callbacks;
 
-	//! threads
-	kj::AsyncIoProvider::PipeThread _pipeThread;
-
 public:
-	char _opCodeSend = 0;
-	char _opCodeRecvBuf[1024];
+	char _thrOpCodeSend = 0;
+	char _thrOpCodeRecvBuf[1024];
 
 	CallbackEntry _opCmd;
 	int _nextSn = 0;

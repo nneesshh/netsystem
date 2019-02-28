@@ -21,7 +21,7 @@
 
 */
 CKjNullLobby::CKjNullLobby()
-	: _tcpConnFactory(new CKjConnFactory(nullptr))
+	: _tcpConnFactory(new CKjConnFactory())
 	, _zoneManager(new CSimpleZoneManager())
 	, _accountManager(new CSimpleAccountManager()) {
 

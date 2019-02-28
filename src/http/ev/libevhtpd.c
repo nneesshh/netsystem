@@ -1,12 +1,16 @@
 ﻿#include "libevhtpd.h"
 
+#include <stdlib.h>
+
+#include "../http_thr_aux.h"
+
 /**------------------------------------------------------------------------------
 *
 */
 void
 init_thread(evhtp_t *htp, evthr_t *thread, void *arg) {
 	http_thr_aux_t *aux;
-	aux = calloc(sizeof(http_thr_aux_t), 1);
+	aux = calloc(1, sizeof(http_thr_aux_t));
 	aux->_thr_fd = 0;
 	aux->_thr_base = evthr_get_base(thread);
 	aux->_thr_userdata = NULL;

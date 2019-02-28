@@ -21,7 +21,7 @@
 
 */
 CUvNullLobby::CUvNullLobby()
-	: _tcpConnFactory(new CUvConnFactory(nullptr))
+	: _tcpConnFactory(new CUvConnFactory())
 	, _zoneManager(new CSimpleZoneManager())
 	, _accountManager(new CSimpleAccountManager()) {
 

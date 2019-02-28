@@ -5,7 +5,7 @@
 extern "C" { 
 #endif 
 
-#include "../../base/platform_types.h"
+#include "../../base/netsystem_extern.h"
 
 #include "../ev/server_handle.h"
 
@@ -46,10 +46,10 @@ struct uvsrvr_impl_t {
 };
 
 /** **/
-MY_EXTERN uv_loop_t *			uv_server_get_loop_(server_handle_t *srvr);
+MY_NETSYSTEM_EXTERN uv_loop_t *			uv_server_get_loop_(server_handle_t *srvr);
 
-MY_EXTERN int					uv_server_init_(server_handle_t *srvr, struct uvsrvr_impl_t *srvr_impl);
-MY_EXTERN void					uv_server_dispose_(server_handle_t *srvr);
+MY_NETSYSTEM_EXTERN int					uv_server_init_(server_handle_t *srvr, struct uvsrvr_impl_t *srvr_impl);
+MY_NETSYSTEM_EXTERN void				uv_server_dispose_(server_handle_t *srvr);
 
 #ifdef __cplusplus 
 } 

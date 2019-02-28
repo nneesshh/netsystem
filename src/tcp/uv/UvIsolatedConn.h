@@ -5,8 +5,6 @@
 
 (C) 2016 n.lee
 */
-#include "../../common/UsingMyToolkitMini.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,6 +46,8 @@ public:
 public:
 	/** **/
 	virtual void				DisposeConnection() override;
+	virtual void				FlushStream() override;
+
 	virtual void				PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) override;
 	virtual size_t				SendRaw(const uint8_t *buf, size_t len) override;
 
@@ -141,10 +141,15 @@ public:
 	/** **/
 	virtual void				OnIsolatedError() override;
 
+	/** **/
+	virtual	void				SetConnectedEventPosted(bool x = true) override {
+		// useless
+		(void)x;
+	}
+
 	/** Connect and reconnect **/
 	virtual int					Connect(void *base, std::string& sIp_or_Hostname, unsigned short nPort) override;
 	virtual void				Reconnect() override;
-	virtual void				FlushConnection() override;
 	virtual void				DelayReconnect(int nDelaySeconds) override;
 
 	/** **/

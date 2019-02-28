@@ -28,22 +28,30 @@
 */
 static int
 on_server_accept_client(server_handle_t *srvr, client_handle_t *clnt, const char *peerip) {
-
+	// accept client cb
 	CEvServer *pServer = static_cast<CEvServer *>(srvr->_userdata);
-	ITcpConn *pConn = pServer->OnAcceptClient((uintptr_t)clnt, peerip);
 
-	//
-	if (nullptr == pConn) {
-		// bind connection impl failed
-		clnt->_connimpl = nullptr;
+	if (!pServer->IsReady()) {
+		// flush stream at once
+		ev_close_((struct bufferevent *)clnt->_sockimpl);
+		clnt->_sockimpl = nullptr;
 		return -1;
 	}
-	
-	// mark as connected
-	if (!pConn->IsDisposed()) {
-		pConn->SetConnected(true);
+	else {
+		//
+		ITcpConn *pConn = pServer->OnAcceptClient((uintptr_t)clnt, std::string(peerip));
+		if (nullptr == pConn) {
+			// bind connection impl failed
+			clnt->_connimpl = nullptr;
+			return -1;
+		}
+
+		// mark as connected
+		if (!pConn->IsDisposed()) {
+			pConn->SetConnected(true);
+		}
+		return 0;
 	}
-	return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -141,22 +149,15 @@ CEvServer::~CEvServer() {
 
 */
 ITcpClient *
-CEvServer::OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp) {
-
-	if (IsClosed())
-		return nullptr;
-
-	if (!_eventManager->IsReady())
-		return nullptr;
-
+CEvServer::OnAcceptClient(uintptr_t streamptr, std::string&& sPeerIp) {
 	//
-	ITcpClient *pClient = _refConnFactory->CreateTcpClientOnServer(sPeerIp, this);
+	ITcpClient *pClient = _refConnFactory->CreateTcpClientOnServer(std::move(sPeerIp), this);
 	if (pClient) {
-
-		pClient->OnConnect();
-
 		// connection is ready
 		_refConnFactory->ConfirmClientIsReady(pClient, streamptr);
+
+		// event
+		pClient->OnConnect();
 	}
 	return pClient;
 }
@@ -237,11 +238,35 @@ CEvServer::Close() {
 		ev_server_dispose_(&_srvr);
 	
 		//
-		_refConnFactory->GetConnManager().OnDisposeAllClients(this);
+		_refConnFactory->GetConnManager().DisposeDownStreams(this);
 
 		//
 		_closed = true;
 	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CEvServer::FlushDownStream(uintptr_t streamptr) {
+	client_handle_t *clnt = nullptr;
+	auto iter = _tcpStreamDict.find(streamptr);
+	if (iter != _tcpStreamDict.end()) {
+
+		clnt = iter->second;
+		_tcpStreamDict.erase(iter);
+	}
+
+	// flush stream
+	ev_close_((struct bufferevent *)clnt->_sockimpl);
+	clnt->_sockimpl = nullptr;
+
+	// free conn handle
+	bip_buf_destroy(clnt->_bb);
+	free(clnt);
+	clnt = NULL;
 }
 
 /** -- EOF -- **/

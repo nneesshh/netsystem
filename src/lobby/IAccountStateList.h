@@ -80,7 +80,7 @@ public:
 
 	virtual void				KeepAlive(ACCOUNT_STATE& accState, time_t tmNow) = 0;
 	virtual ACCOUNT_STATE *		KeepAliveByUid(const char *sUid, time_t tmNow) = 0;
-	virtual void				CheckKeepAlive(int nLostContactToleranceSeconds) = 0;
+	virtual void				CheckKeepAlive(int nLostContactToleranceSeconds, time_t tmNow) = 0;
 
 	virtual ACCOUNT_STATE *		Get(unsigned int nIndexId) = 0;
 	virtual ACCOUNT_STATE *		GetByUid(const char *sUid) = 0;
@@ -92,12 +92,12 @@ public:
 	virtual size_t				GetOnlineCount() = 0;
 	virtual size_t				GetOfflineCount() = 0;
 
-	virtual void				Kick(unsigned int nIndexId) = 0;
-	virtual void				KickByUid(const char *sUid) = 0;
-	virtual void				KickOfflineMoreThan(int nOfflineToleranceSeconds, unsigned int nKickNumMax, std::vector<ACCOUNT_STATE *>& vOutKickedList) = 0;
+	virtual void				Kick(unsigned int nIndexId, time_t tmNow) = 0;
+	virtual void				KickByUid(const char *sUid, time_t tmNow) = 0;
+	virtual void				KickOfflineMoreThan(int nOfflineToleranceSeconds, unsigned int nKickNumMax, time_t tmNow, std::vector<ACCOUNT_STATE *>& vOutKickedList) = 0;
 
 	virtual void				ConfirmAccountIsReady(ACCOUNT_STATE& accState, uint64_t uConnId, uint64_t uInnerUuid, void *pConnImpl, time_t tmNow) = 0;
-	virtual void				Release(ACCOUNT_STATE& accState) = 0;
+	virtual void				Release(ACCOUNT_STATE& accState, time_t tmNow) = 0;
 };
 
 /*EOF*/

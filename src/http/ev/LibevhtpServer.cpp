@@ -12,6 +12,8 @@
 
 #include "../../tcp/ev/ev_client.h"
 
+#include "../../netsystem/RootContextDef.hpp"
+
 #ifdef _MSC_VER
 #ifdef _DEBUG
 #define new   new(_NORMAL_BLOCK, __FILE__,__LINE__)
@@ -58,7 +60,7 @@ gencb(evhtp_request_t *request, void *arg) {
 	CLibevhtpServer *htp_server;
 	int r = 0;
 
-	printf("process_request(%p)\n", request);
+	//printf("process_request(%p)\n", request);
 
 	thread = get_request_thr(request);
 	if (thread) {
@@ -82,17 +84,19 @@ gencb(evhtp_request_t *request, void *arg) {
 	htp_server = (CLibevhtpServer *)arg;
 	if (htp_server && htp_server->_requsetHandler) {
 		r = htp_server->_requsetHandler(htp_server, uri->path->full, request, cbuf, n);
+		if (0 != r) {
+			StdLog *pLog = netsystem_get_log();
+			if (pLog) {
+				pLog->logprint(LOG_LEVEL_WARNING, "[LibevhtpServer->gencb()]!!! process request error -- result(%d)",
+					r);
+			}
+		}
 	}
-
-	if (0 >= r) {
-		//evhtp_request_free(request);
-	}
-
 }
 
 struct kvs_userdata {
 	IHttpServer *_httpServer;
-	HTTP_QUERY_ITERATOR _kvscb;
+	std::function<int(void *kvobj)> _kvscb;
 };
 
 static int
@@ -105,9 +109,9 @@ kvs_iterator(evhtp_kv_t *kvobj, void *arg) {
 /**
 
 */
-CLibevhtpServer::CLibevhtpServer(unsigned short nPort, StdLog *pLog)
-	: _closed(false)
-	, _refLog(pLog) {
+CLibevhtpServer::CLibevhtpServer(unsigned short nPort)
+	: _closed(false) {
+
 	memset(&_srvr, 0, sizeof(_srvr));
 
 	_srvr._fd = 0;
@@ -221,19 +225,6 @@ CLibevhtpServer::ResumeRequest(void *req_handle) {
 
 */
 void
-CLibevhtpServer::ForEach(void *query_handle, HTTP_QUERY_ITERATOR kvscb) {
-	evhtp_query_t *query = (evhtp_query_t *)query_handle;
-	struct kvs_userdata ku;
-	ku._httpServer = this;
-	ku._kvscb = kvscb;
-	evhtp_kvs_for_each(query, kvs_iterator, &ku);
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
 CLibevhtpServer::Close() {
 	libevhtpd_exit(&_srvr);
 }
@@ -245,6 +236,32 @@ CLibevhtpServer::Close() {
 bool
 CLibevhtpServer::IsClosed() {
 	return _closed;
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+bool
+CLibevhtpServer::ParseQueryString(void *req_handle, std::string& outQueyString) {
+	evhtp_request_t *request = (evhtp_request_t *)req_handle;
+	evhtp_uri_t *uri = request->uri;
+
+	if (uri && uri->query) {
+		struct kvs_userdata ku;
+		ku._httpServer = this;
+		ku._kvscb = [&outQueyString](void *kv)->int {
+
+			evhtp_kv_t *kvobj = (evhtp_kv_t *)kv;
+			outQueyString.append(kvobj->key).append("=").append(kvobj->val).append("&");
+			return 0;
+		};
+
+		//
+		evhtp_kvs_for_each(uri->query, kvs_iterator, &ku);
+		return true;
+	}
+	return false;
 }
 
 /** -- EOF -- **/

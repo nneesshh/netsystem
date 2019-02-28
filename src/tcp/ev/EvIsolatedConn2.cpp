@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../../base/MyMacros.h"
+#include "../../netsystem/RootContextDef.hpp"
+
 #include "../tcp_packet_def.h"
 #include "../TcpOuterPacket.h"
 
@@ -114,7 +117,7 @@ on_isolated_error(struct bufferevent *bev, short what, void *arg) {
 		//
 		if (pConn) {
 			// flush and error
-			pConn->FlushConnection();
+			pConn->FlushStream();
 			pConn->OnIsolatedError();
 		}
 	}
@@ -152,7 +155,7 @@ CEvIsolatedConn2::~CEvIsolatedConn2() {
 	_eventManager->ClearAllEventHandlers();
 
 #ifdef _VERBOSE_TRACE_
-	StdLog *pLog = _refConnFactory->GetLogHandler();
+	StdLog *pLog = netsystem_get_log();
 	if (pLog)
 		pLog->logprint(LOG_LEVEL_NOTICE, "\n[~CEvIsolatedConn2()]: connection is destroyed, connid(%08llu).\n"
 			, _connId);
@@ -201,7 +204,7 @@ CEvIsolatedConn2::OnDisconnect() {
 		_eventManager->OnEvent(CONNECTION_DISCONNECTED, this);
 
 		// notice
-		StdLog *pLog = _refConnFactory->GetLogHandler();
+		StdLog *pLog = netsystem_get_log();
 		if (pLog)
 			pLog->logprint(LOG_LEVEL_NOTICE, "\n\t!!!! [CEvIsolatedConn2::OnDisconnect()]: connid(%08llu) -- target_IP=(%s) target_port=(%d) !!!!\n",
 				_connId, _sIp.c_str(), _nPort);
@@ -242,7 +245,7 @@ CEvIsolatedConn2::DisposeConnection() {
 		SAFE_DELETE(_packet);
 
 		// flush stream
-		FlushConnection();
+		FlushStream();
 
 		// kill reconnect timer
 		if (_reconnectTimer) {
@@ -257,11 +260,27 @@ CEvIsolatedConn2::DisposeConnection() {
 
 */
 void
+CEvIsolatedConn2::FlushStream() {
+	// 
+	if (_clnt
+		&& _clnt->_sockimpl
+		&& !IsFlushed()) {
+
+		ev_close_((struct bufferevent *)_clnt->_sockimpl);
+		_clnt->_sockimpl = nullptr;
+
+		SetFlushed(true);
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
 CEvIsolatedConn2::PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
-
-	assert(IsReady());
-
-	_packet->Post(uInnerUuid, uSerialNo, sTypeName, sBody);
+	if (_packet)
+		_packet->Post(std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody)));
 }
 
 //------------------------------------------------------------------------------
@@ -327,8 +346,8 @@ CEvIsolatedConn2::Disconnect() {
 
 		OnDisconnect();
 
-		// flush stream
-		_refConnFactory->IsolatedConnFlush(this);
+		// release
+		_refConnFactory->ReleaseConnection(this);
 	}
 }
 
@@ -447,24 +466,6 @@ CEvIsolatedConn2::Reconnect() {
 		//
 		fprintf(stderr, "\n\t!!!! [CEvIsolatedConn2::Reconnect()]: still in flushing, reconnect abort!!! connected(%d)disposed(%d)flushed(%d), connid(%08llu) -- target_IP=(%s) target_port=(%d)!\n",
 			_bConnected, _bDisposed, _bFlushed, _connId, _sIp.c_str(), _nPort);
-	}
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
-CEvIsolatedConn2::FlushConnection() {
-	// flush tcp stream only
-	if (_clnt
-		&& _clnt->_sockimpl
-		&& !IsFlushed()) {
-
-		ev_close_((struct bufferevent *)_clnt->_sockimpl);
-		_clnt->_sockimpl = nullptr;
-
-		SetFlushed(true);
 	}
 }
 

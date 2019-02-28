@@ -5,8 +5,6 @@
 
 (C) 2016 n.lee
 */
-#include "../common/UsingMyToolkitMini.h"
-
 #include "../tcp/ITcpConnFactory.h"
 #include "../tcp/ITcpConn.h"
 

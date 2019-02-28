@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "../../base/MyMacros.h"
+
 #include "../TcpConnManager.h"
 #include "../TcpEventManager.h"
 
@@ -180,17 +182,26 @@ static int
 on_server_accept_client(server_handle_t *srvr, client_handle_t *clnt, const char *peerip) {
 	// accept client cb
 	CUvServer *pServer = static_cast<CUvServer *>(srvr->_userdata);
-	uintptr_t streamptr = pServer->AddStream(clnt);
-	ITcpConn *pConn = pServer->OnAcceptClient(streamptr, peerip);
-	if (nullptr == pConn) {
-		// bind connection impl failed
-		clnt->_connimpl = nullptr;
+
+	if (!pServer->IsReady()) {
+		// flush stream at once
+		uv_close_((uv_handle_t *)clnt->_sockimpl, on_stream_close);
+		clnt->_sockimpl = nullptr;
 		return -1;
 	}
 	else {
+		//
+		uintptr_t streamptr = pServer->AddStream(clnt);
+		ITcpConn *pConn = pServer->OnAcceptClient(streamptr, std::string(peerip));
+		if (nullptr == pConn) {
+			// bind connection impl failed
+			clnt->_connimpl = nullptr;
+			return -1;
+		}
+		
 		clnt->_connimpl = pConn;
+		return 0;
 	}
-	return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -220,22 +231,15 @@ CUvServer::~CUvServer() {
 
 */
 ITcpClient *
-CUvServer::OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp) {
-
-	if (IsClosed())
-		return nullptr;
-
-	if (!_eventManager->IsReady())
-		return nullptr;
-
+CUvServer::OnAcceptClient(uintptr_t streamptr, std::string&& sPeerIp) {
 	//
-	ITcpClient *pClient = _refConnFactory->CreateTcpClientOnServer(sPeerIp, this);
+	ITcpClient *pClient = _refConnFactory->CreateTcpClientOnServer(std::string(sPeerIp), this);
 	if (pClient) {
-
-		pClient->OnConnect();
-
 		// connection is ready
 		_refConnFactory->ConfirmClientIsReady(pClient, streamptr);
+
+		// event
+		pClient->OnConnect();
 	}
 	return pClient;
 }
@@ -317,11 +321,31 @@ CUvServer::Close() {
 		uv_server_dispose_(&_srvr);
 
 		//
-		_refConnFactory->GetConnManager().OnDisposeAllClients(this);
+		_refConnFactory->GetConnManager().DisposeDownStreams(this);
 
 		//
 		_closed = true;
 	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CUvServer::FlushDownStream(uintptr_t streamptr) {
+	client_handle_t *clnt = nullptr;
+	auto iter = _tcpStreamDict.find(streamptr);
+	if (iter != _tcpStreamDict.end()) {
+
+		clnt = iter->second;
+		_tcpStreamDict.erase(iter);
+	}
+
+	uv_close_((uv_handle_t *)clnt->_sockimpl, on_sock_close);
+	bip_buf_destroy(clnt->_bb);
+	free(clnt);
+	clnt = NULL;
 }
 
 /** -- EOF -- **/

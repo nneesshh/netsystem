@@ -5,15 +5,17 @@
 #include "ConnFactoryTrunkQueue.hpp"
 
 #include "../ITcpEventManager.h"
-#include "../ITcpConnFactory.h"
+
+#include "KjConnFactory.hpp"
 
 //------------------------------------------------------------------------------
 /**
 
 */
-CConnFactoryTrunkQueue::CConnFactoryTrunkQueue()
-	: _workQueue(std::make_shared<CCamelReaderWriterQueueWL>()) {
-
+CConnFactoryTrunkQueue::CConnFactoryTrunkQueue(CKjConnFactoryBase *pFactory)
+	: _refConnFactory(pFactory)
+	, _callbacks(std::make_shared<CCamelReaderWriterQueueWL>()) {
+	
 }
 
 //------------------------------------------------------------------------------
@@ -29,11 +31,39 @@ CConnFactoryTrunkQueue::~CConnFactoryTrunkQueue() {
 
 */
 void
-CConnFactoryTrunkQueue::AddAcceptClientCb(ITcpServer *pServer, uintptr_t streamptr, std::string& sPeerIp) {
+CConnFactoryTrunkQueue::Add(std::function<void()>&& workCb) {
 
-	auto workCb = std::bind([](ITcpServer *pServer, uintptr_t streamptr, const std::string& sPeerIp) {
+	_callbacks->Add(std::move(workCb));
+	
+	// write opcode to pipe
+	++_refConnFactory->_trunkOpCodeSend;
 
-		pServer->OnAcceptClient(streamptr, sPeerIp);
+	kj::AsyncIoStream& pipeEndPoint = _refConnFactory->_refPipeWorker->endpointContext->GetEndpoint();
+	pipeEndPoint.write((const void *)&_refConnFactory->_trunkOpCodeSend, 1);
+	netsystem_get_servercore()->PipeNotify(pipeEndPoint, _refConnFactory->_trunkOpCodeSend);
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CConnFactoryTrunkQueue::AddAcceptClientCb(ITcpServer *pServer, uintptr_t streamptr, std::string&& sPeerIp) {
+
+	auto workCb = std::bind([](ITcpServer *pServer, uintptr_t streamptr, std::string sPeerIp) {
+
+		if (!pServer->IsClosed()) {
+			pServer->OnAcceptClient(streamptr, std::move(sPeerIp));
+		}
+		else {
+			// ignore "OnAcceptClient" event to avoid memory leak when exit
+			fprintf(stderr, "[CConnFactoryTrunkQueue::AddAcceptClientCb()] server is closed, peer(%s) accept event is ignored.\n",
+				sPeerIp.c_str());
+
+			// flush downstream to backend through factory
+			pServer->GetConnFactory().FlushTcpServerDownStream(pServer, streamptr);
+		}
+
   	}, pServer, streamptr, std::move(sPeerIp));
 
 	//
@@ -51,12 +81,11 @@ CConnFactoryTrunkQueue::AddClientDisconnectCb(ITcpServer *pServer, ITcpClient *p
 
 		pClient->IncrFrontEndConsumeNum();
 
-		//
 		pClient->OnDisconnect();
 
 		// remove and dispose conn
 		pServer->GetConnFactory().GetConnManager().OnRemoveClient(pServer, pClient);
-
+		
 	}, pServer, pClient, pConnMgr);
 	pClient->IncrBackEndProduceNum();
 
@@ -123,8 +152,14 @@ CConnFactoryTrunkQueue::AddIsolatedConnectCb(ITcpIsolated *pIsolated, ITcpConnMa
 
 		pIsolated->IncrFrontEndConsumeNum();
 
-		fprintf(stderr, "Connect ok -- connid(%08llu)connptr(0x%08Ix).\n",
-			pIsolated->GetConnId(), (uintptr_t)pIsolated);
+		StdLog *pLog = netsystem_get_log();
+		if (pLog)
+			pLog->logprint(LOG_LEVEL_NOTICE, "[CConnFactoryTrunkQueue::AddIsolatedConnectCb()] Connect ok -- connid(%08llu)connptr(0x%08Ix).\n",
+				pIsolated->GetConnId(), (uintptr_t)pIsolated);
+
+// 		fprintf(stderr, "[CConnFactoryTrunkQueue::AddIsolatedConnectCb()] Connect ok -- connid(%08llu)connptr(0x%08Ix).\n",
+// 			pIsolated->GetConnId(), (uintptr_t)pIsolated);
+
 		pIsolated->OnConnect();
 
 	}, pIsolated, pConnMgr);
@@ -140,8 +175,6 @@ CConnFactoryTrunkQueue::AddIsolatedConnectCb(ITcpIsolated *pIsolated, ITcpConnMa
 */
 void
 CConnFactoryTrunkQueue::AddIsolatedDisconnectCb(ITcpIsolated *pIsolated, ITcpConnManager *pConnMgr) {
-
-	assert(pIsolated->IsConnected());
 
 	auto workCb = std::bind([](ITcpIsolated *pIsolated, ITcpConnManager *pConnMgr) {
 
@@ -188,7 +221,6 @@ CConnFactoryTrunkQueue::AddIsolatedPacketCb(ITcpIsolated *pIsolated, uint64_t uC
 */
 void
 CConnFactoryTrunkQueue::AddIsolatedInnerPacketCb(ITcpIsolated *pIsolated, uint64_t uConnId, uint64_t uInnerUuid, uint8_t uSerialNo, std::string&& sTypeName, std::string&& sBody) {
-
 	auto workCb = std::bind([](ITcpIsolated *pIsolated, uint64_t uConnId, uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
 
 		pIsolated->IncrFrontEndConsumeNum();

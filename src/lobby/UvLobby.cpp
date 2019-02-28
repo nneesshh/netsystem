@@ -20,9 +20,9 @@
 /**
 
 */
-CUvLobby::CUvLobby(unsigned short nPort, StdLog *pLog)
+CUvLobby::CUvLobby(unsigned short nPort)
 	: _port(nPort)
-	, _tcpConnFactory(new CUvConnFactory(pLog))
+	, _tcpConnFactory(new CUvConnFactory())
 	, _zoneManager(new CSimpleZoneManager())
 	, _accountManager(new CSimpleAccountManager()) {
 

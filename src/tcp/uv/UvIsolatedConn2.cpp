@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../../base/MyMacros.h"
+#include "../../netsystem/RootContextDef.hpp"
+
 #include "../tcp_packet_def.h"
 #include "../TcpOuterPacket.h"
 
@@ -84,7 +87,7 @@ on_isolated_recv(uv_stream_t *stream, ssize_t nread, const uv_buf_t *buf) {
 
 			if (pConn) {
 				// flush and error
-				pConn->FlushConnection();
+				pConn->FlushStream();
 				pConn->OnIsolatedError();
 			}
 			else {
@@ -135,7 +138,7 @@ on_isolated_send(uv_write_t* req, int status) {
 			ITcpIsolated *pConn = (ITcpIsolated *)clnt->_connimpl;
 			if (pConn) {
 				// flush and error
-				pConn->FlushConnection();
+				pConn->FlushStream();
 				pConn->OnIsolatedError();
 			}
 			else {
@@ -215,7 +218,7 @@ on_isolated_connect_error(uv_connect_t *req, int status) {
 
 		if (pConn) {
 			// flush and error
-			pConn->FlushConnection();
+			pConn->FlushStream();
 			pConn->OnIsolatedError();
 		}
 		else {
@@ -281,7 +284,7 @@ CUvIsolatedConn2::~CUvIsolatedConn2() {
 	_eventManager->ClearAllEventHandlers();
 
 #ifdef _VERBOSE_TRACE_
-	StdLog *pLog = _refConnFactory->GetLogHandler();
+	StdLog *pLog = netsystem_get_log();
 	if (pLog)
 		pLog->logprint(LOG_LEVEL_NOTICE, "\n[~CUvIsolatedConn2()]: connection is destroyed, connid(%08llu).\n"
 			, _connId);
@@ -329,7 +332,7 @@ CUvIsolatedConn2::OnDisconnect() {
 		_eventManager->OnEvent(CONNECTION_DISCONNECTED, this);
 
 		// notice
-		StdLog *pLog = _refConnFactory->GetLogHandler();
+		StdLog *pLog = netsystem_get_log();
 		if (pLog)
 			pLog->logprint(LOG_LEVEL_NOTICE, "\n\t!!!! [CUvIsolatedConn2::OnDisconnect()]: connid(%08llu) -- target_IP=(%s) target_port=(%d) !!!!\n",
 				_connId, _sIp.c_str(), _nPort);
@@ -370,7 +373,7 @@ CUvIsolatedConn2::DisposeConnection() {
 		SAFE_DELETE(_packet);
 
 		// flush stream
-		FlushConnection();
+		FlushStream();
 
 		// kill reconnect timer
 		if (_reconnectTimer) {
@@ -385,11 +388,27 @@ CUvIsolatedConn2::DisposeConnection() {
 
 */
 void
+CUvIsolatedConn2::FlushStream() {
+	//
+	if (_clnt
+		&& _clnt->_sockimpl
+		&& !IsFlushed()) {
+
+		uv_close_((uv_handle_t *)_clnt->_sockimpl, on_stream_close);
+		_clnt->_sockimpl = nullptr;
+
+		SetFlushed(true);
+	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
 CUvIsolatedConn2::PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) {
-
-	assert(IsReady());
-
-	_packet->Post(uInnerUuid, uSerialNo, sTypeName, sBody);
+	if (_packet)
+		_packet->Post(std::make_tuple(uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody)));
 }
 
 //------------------------------------------------------------------------------
@@ -458,8 +477,8 @@ CUvIsolatedConn2::Disconnect() {
 
 		OnDisconnect();
 
-		// flush stream
-		_refConnFactory->IsolatedConnFlush(this);
+		// release
+		_refConnFactory->ReleaseConnection(this);
 	}
 }
 
@@ -556,24 +575,6 @@ CUvIsolatedConn2::Reconnect() {
 		//
 		fprintf(stderr, "\n\t!!!! [CUvIsolatedConn2::Reconnect()]: still in flushing, reconnect abort!!! connected(%d)disposed(%d)flushed(%d), connid(%08llu) -- target_IP=(%s) target_port=(%d)!\n",
 			_bConnected, _bDisposed, _bFlushed, _connId, _sIp.c_str(), _nPort);
-	}
-}
-
-//------------------------------------------------------------------------------
-/**
-
-*/
-void
-CUvIsolatedConn2::FlushConnection() {
-	// flush tcp stream only
-	if (_clnt
-		&& _clnt->_sockimpl
-		&& !IsFlushed()) {
-
-		uv_close_((uv_handle_t *)_clnt->_sockimpl, on_stream_close);
-		_clnt->_sockimpl = nullptr;
-
-		SetFlushed(true);
 	}
 }
 

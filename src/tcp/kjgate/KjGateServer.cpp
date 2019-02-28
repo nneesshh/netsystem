@@ -10,6 +10,12 @@
 #include <stdlib.h>
 #include <time.h>
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
+#include "../../base/MyMacros.h"
+
 #include "../TcpConnManager.h"
 #include "../TcpEventManager.h"
 
@@ -38,7 +44,7 @@ CKjGateServer::CKjGateServer(ITcpConnFactory *pFactory)
 /**
 
 */
-CKjGateServer::~CKjGateServer() {
+CKjGateServer::~CKjGateServer() noexcept {
 
 	SAFE_DELETE(_eventManager);
 	_refConnFactory = nullptr;
@@ -49,22 +55,15 @@ CKjGateServer::~CKjGateServer() {
 
 */
 ITcpClient *
-CKjGateServer::OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp) {
-	
-	if (IsClosed())
-		return nullptr;
-
-	if (!_eventManager->IsReady())
-		return nullptr;
-
+CKjGateServer::OnAcceptClient(uintptr_t streamptr, std::string&& sPeerIp) {
 	//
-	ITcpClient *pClient = _refConnFactory->CreateTcpClientOnServer(sPeerIp, this);
+	ITcpClient *pClient = _refConnFactory->CreateTcpClientOnServer(std::move(sPeerIp), this);
 	if (pClient) {
-
-		pClient->OnConnect();
-
 		// connection is ready
 		_refConnFactory->ConfirmClientIsReady(pClient, streamptr);
+
+		// event
+		pClient->OnConnect();
 	}
 	return pClient;
 }
@@ -93,8 +92,8 @@ CKjGateServer::OnDisposeClient(ITcpClient *pClient) {
 int
 CKjGateServer::Open(void *base, unsigned short port) {
 	// init base
-	_thr_tioContext = kj::addRef(*(KjSimpleThreadIoContext *)base);
-	_thr_tasks = _thr_tioContext->CreateTaskSet(*this);
+	_thr_endpointContext = kj::addRef(*(KjPipeEndpointIoContext *)base);
+	_thr_tasks = netsystem_get_servercore()->NewTaskSet(*this);
 
 	// init shutdown watcher
 	auto paf = kj::newPromiseAndFulfiller<void>();
@@ -121,7 +120,7 @@ CKjGateServer::Close() {
 			auto& tcpStream = iter.second;
 
 			// flush stream
-			tcpStream->Disconnect();
+			tcpStream->FlushStream();
 		}
 		_thr_tcpStreamDict.clear();
 
@@ -131,15 +130,31 @@ CKjGateServer::Close() {
 		_thr_shutdownFulfiller = nullptr;
 
 		// dispose base
-		_thr_tioContext = nullptr;
+		_thr_endpointContext = nullptr;
 		_thr_tasks = nullptr;
 	
 		//
-		_refConnFactory->GetConnManager().OnDisposeAllClients(this);
+		_refConnFactory->GetConnManager().DisposeDownStreams(this);
 
 		//
 		_closed = true;
 	}
+}
+
+//------------------------------------------------------------------------------
+/**
+
+*/
+void
+CKjGateServer::FlushDownStream(uintptr_t streamptr) {
+	kj::Own<KjTcpDownStream> tcpStream;
+	auto iter = _thr_tcpStreamDict.find(streamptr);
+	if (iter != _thr_tcpStreamDict.end()) {
+
+		tcpStream = kj::mv(iter->second);
+		_thr_tcpStreamDict.erase(iter);
+	}
+	tcpStream = nullptr;
 }
 
 //------------------------------------------------------------------------------
@@ -157,7 +172,7 @@ CKjGateServer::InitListener() {
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(_serverPort);
 
-	kj::Own<kj::NetworkAddress>&& addr = _thr_tioContext->GetNetwork().getSockaddr((const sockaddr *)&sin, sizeof(sin));
+	kj::Own<kj::NetworkAddress>&& addr = _thr_endpointContext->GetNetwork().getSockaddr((const sockaddr *)&sin, sizeof(sin));
 	kj::Own<kj::ConnectionReceiver> listener = addr->listen();
 
 	_serverFd = listener->getFd();
@@ -188,26 +203,48 @@ CKjGateServer::StartAccepLoop(kj::Own<kj::ConnectionReceiver> listener) {
 /**
 
 */
+static kj::Promise<void> kj_ready_now() { return kj::READY_NOW; }
+
 kj::Promise<void>
 CKjGateServer::AcceptLoop(kj::Own<kj::ConnectionReceiver>&& listener) {
 
-	auto ptr = listener.get();
-	return ptr->accept().then(kj::mvCapture(kj::mv(listener),
+	return listener->accept().then(kj::mvCapture(listener,
 		[this](kj::Own<kj::ConnectionReceiver>&& listener,
 			kj::Own<kj::AsyncIoStream>&& stream) {
-		//
-		struct sockaddr_in sin;
-		memset(&sin, 0, sizeof(sin));
-		kj::uint len = sizeof(sin);
-		stream->getpeername((sockaddr *)&sin, &len);
-		std::string sPeerIp = inet_ntoa(sin.sin_addr);
 
-		// accept client cb
-		uintptr_t streamptr = AddStream(kj::mv(stream));
-		_refConnFactory->AddAcceptClientCb(this, streamptr, sPeerIp);
+		if (!this->IsReady()) {
+			// flush stream at once
+			/*try {
+				_stream->abortRead();
+				_stream->shutdownWrite();
+			}
+			catch(std::exception& e) {
+				fprintf(stderr, "[CKjGateServer::AcceptLoop()] abortRead or shutdownWrite exception -- what(%s)!!!"
+					, e.what());
+			}*/
+			stream = nullptr;
 
-		// loop
-		return AcceptLoop(kj::mv(listener));
+			// loop or stop
+			if (IsClosed()) {
+				return kj_ready_now();
+			}
+			return AcceptLoop(kj::mv(listener));
+		}
+		else {
+			//
+			struct sockaddr_in sin;
+			memset(&sin, 0, sizeof(sin));
+			kj::uint len = sizeof(sin);
+			stream->getpeername((sockaddr *)&sin, &len);
+			std::string sPeerIp = inet_ntoa(sin.sin_addr);
+
+			// accept client cb
+			uintptr_t streamptr = AddStream(kj::mv(stream));
+			_refConnFactory->AddAcceptClientCb(this, streamptr, kj::mv(sPeerIp));
+
+			// loop
+			return AcceptLoop(kj::mv(listener));
+		}
 	}));
 }
 
@@ -228,7 +265,7 @@ CKjGateServer::taskFailed(kj::Exception&& exception) {
 #endif
 
 	// alert
-	StdLog *pLog = _refConnFactory->GetLogHandler();
+	StdLog *pLog = netsystem_get_log();
 	if (pLog)
 		pLog->logprint(LOG_LEVEL_ALERT, "\n\n\n[CKjGateServer::taskFailed()] exception_desc(%s)!!! port(%d)fd(%d)closed(%d)\n\n\n",
 			exception.getDescription().cStr(), _serverPort, (int)_serverFd, _closed);

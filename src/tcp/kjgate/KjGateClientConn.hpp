@@ -5,16 +5,14 @@
     
     (C) 2016 n.lee
 */
-#include "../../common/UsingMyToolkitMini.h"
+#include "servercore/io/KjPipeEndpointIoContext.hpp"
 
 #include "../IPacket.h"
 #include "../ITcpServer.h"
 #include "../ITcpClient.h"
 
 #include "../TcpConnManager.h"
-
-#include "../kj/KjSimpleThreadIoContext.hpp"
-#include "../kj/KjTcpIoStream.hpp"
+#include "../kj/KjTcpDownStream.hpp"
 
 //------------------------------------------------------------------------------
 /** 
@@ -22,8 +20,8 @@
 */
 class CKjGateClientConn : public ITcpClient, public kj::TaskSet::ErrorHandler {
 public:
-	CKjGateClientConn(uint64_t uConnId, const std::string& sPeerIp, ITcpServer *pServer);
-	virtual ~CKjGateClientConn();
+	CKjGateClientConn(uint64_t uConnId, std::string&& sPeerIp, ITcpServer *pServer);
+	virtual ~CKjGateClientConn() noexcept;
 
 	/** **/
 	virtual void				OnConnect() override;
@@ -41,6 +39,8 @@ public:
 public:
 	/** **/
 	virtual void				DisposeConnection() override;
+	virtual void				FlushStream() override;
+
 	virtual void				PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) override;
 	
 	virtual size_t				SendRaw(const uint8_t *buf, size_t len) override {
@@ -148,9 +148,9 @@ private:
 	void taskFailed(kj::Exception&& exception) override;
 
 public:
-	kj::Own<KjSimpleThreadIoContext> _thr_tioContext;
+	kj::Own<KjPipeEndpointIoContext> _thr_endpointContext;
 	kj::Own<kj::TaskSet> _thr_tasks;
-	kj::Own<KjTcpIoStream> _thr_tcpStream;
+	kj::Own<KjTcpDownStream> _thr_tcpStream;
 
 	IPacket *_thr_packet = nullptr;
 

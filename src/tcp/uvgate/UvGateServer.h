@@ -7,8 +7,6 @@
 */
 #include <unordered_map>
 
-#include "../../common/UsingMyToolkitMini.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,16 +30,21 @@ public:
 	virtual ~CUvGateServer();
 
 	/** Server accept and dispose client */
-	virtual ITcpClient *		OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp) override;
+	virtual ITcpClient *		OnAcceptClient(uintptr_t streamptr, std::string&& sPeerIp) override;
 	virtual void				OnDisposeClient(ITcpClient *pClient) override;
 
 public:
 	/** Open and close **/
 	virtual int					Open(void *base, unsigned short port) override;
 	virtual void				Close() override;
+	virtual void				FlushDownStream(uintptr_t streamptr) override;
 
 	virtual bool				IsClosed() override {
 		return _closed;
+	}
+
+	virtual bool				IsReady() override {
+		return !IsClosed() && GetEventManager().IsReady();
 	}
 
 	/** **/

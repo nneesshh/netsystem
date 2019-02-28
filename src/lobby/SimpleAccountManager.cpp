@@ -4,10 +4,9 @@
 //------------------------------------------------------------------------------
 #include "SimpleAccountManager.h"
 
-#include <time.h>
-#include <locale.h>
+#include "../base/MyMacros.h"
+#include "../base/snprintf/mysnprintf.h"
 
-#include "../common/UsingMyToolkitMini.h"
 #include "AccountStateList.h"
 
 #ifdef _MSC_VER
@@ -145,7 +144,7 @@ CSimpleAccountManager::Register(const char *sUid,
 
 */
 void
-CSimpleAccountManager::Unregister(ONLINE_HANDLE& account) {
+CSimpleAccountManager::Unregister(ONLINE_HANDLE& account, time_t tmNow) {
 	if (account.is_ready) {
 
 		// clear conflict keyid before release
@@ -157,7 +156,7 @@ CSimpleAccountManager::Unregister(ONLINE_HANDLE& account) {
 		}
 
 		//
-		_onlineList->Release(account);
+		_onlineList->Release(account, tmNow);
 	}
 	else {
 		fprintf(stderr, "\n\n\n!!![CSimpleAccountManager::Unregister()] unregister two times!!! -- keyid(%d),uid(%s)\n\n\n",
@@ -170,13 +169,13 @@ CSimpleAccountManager::Unregister(ONLINE_HANDLE& account) {
 
 */
 void
-CSimpleAccountManager::UnregisterByConnId(uint64_t uConnId) {
+CSimpleAccountManager::UnregisterByConnId(uint64_t uConnId, time_t tmNow) {
 	// walk
 	ONLINE_HANDLE *online_;
 	ACCOUNT_STATE_POOL& pool_ = _onlineList->GetPool();
 	OBJECT_POOL_ITERATE_USED_OBJECT_BEGIN((&pool_), online_) {
 		if (uConnId == online_->route_table.connid) {
-			Unregister(*online_);
+			Unregister(*online_, tmNow);
 		}
 	}
 	OBJECT_POOL_ITERATE_USED_OBJECT_END();

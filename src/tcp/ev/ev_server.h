@@ -4,7 +4,7 @@
 extern "C" {
 #endif 
 
-#include "../../base/platform_types.h"
+#include "../../base/netsystem_extern.h"
 
 #include "server_handle.h"
 
@@ -52,13 +52,13 @@ struct evsrvr_impl_t {
 };
 
 /** **/
-MY_EXTERN struct event_base *	ev_server_get_base_(server_handle_t *srvr);
+MY_NETSYSTEM_EXTERN struct event_base *	ev_server_get_base_(server_handle_t *srvr);
 
-MY_EXTERN int					ev_server_init_(server_handle_t *srvr, struct evsrvr_impl_t *srvr_impl);
-MY_EXTERN void					ev_server_dispose_(server_handle_t *srvr);
+MY_NETSYSTEM_EXTERN int					ev_server_init_(server_handle_t *srvr, struct evsrvr_impl_t *srvr_impl);
+MY_NETSYSTEM_EXTERN void				ev_server_dispose_(server_handle_t *srvr);
 
-MY_EXTERN void					ev_server_enable_(server_handle_t *srvr);
-MY_EXTERN void					ev_server_disable_(server_handle_t *srvr);
+MY_NETSYSTEM_EXTERN void				ev_server_enable_(server_handle_t *srvr);
+MY_NETSYSTEM_EXTERN void				ev_server_disable_(server_handle_t *srvr);
 
 #ifdef __cplusplus 
 }

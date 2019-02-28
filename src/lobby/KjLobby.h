@@ -16,7 +16,7 @@
 */
 class CKjLobby : public ILobby {
 public:
-	CKjLobby(unsigned short nPort, StdLog *pLog);
+	CKjLobby(unsigned short nPort);
 	virtual ~CKjLobby();
 
 public:

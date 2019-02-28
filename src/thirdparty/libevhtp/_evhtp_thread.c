@@ -7,6 +7,7 @@
 #include <sys/queue.h>
 #endif
 
+//#include <sys/ioctl.h>
 #include <unistd.h>
 #include <pthread.h>
 
@@ -64,7 +65,8 @@ struct evthr {
     (recv(sock, cmd, sizeof(evthr_cmd_t), 0) == sizeof(evthr_cmd_t)) ? 1 : 0
 
 static void
-_evthr_read_cmd(evutil_socket_t sock, short which, void * args) {
+_evthr_read_cmd(evutil_socket_t sock, short which, void * args)
+{
     evthr_t   * thread;
     evthr_cmd_t cmd;
     int         stopped;
@@ -91,7 +93,8 @@ _evthr_read_cmd(evutil_socket_t sock, short which, void * args) {
 } /* _evthr_read_cmd */
 
 static void *
-_evthr_loop(void * args) {
+_evthr_loop(void * args)
+{
     evthr_t * thread;
 
     if (!(thread = (evthr_t *)args)) {
@@ -114,12 +117,14 @@ _evthr_loop(void * args) {
                                            EV_READ | EV_PERSIST, _evthr_read_cmd, args);
         event_add(thread->shared_pool_ev, NULL);
     }
+
 #endif
 
     pthread_mutex_lock(&thread->lock);
     if (thread->init_cb != NULL) {
         (thread->init_cb)(thread, thread->arg);
     }
+
     pthread_mutex_unlock(&thread->lock);
 
     event_base_loop(thread->evbase, 0);
@@ -128,6 +133,7 @@ _evthr_loop(void * args) {
     if (thread->exit_cb != NULL) {
         (thread->exit_cb)(thread, thread->arg);
     }
+
     pthread_mutex_unlock(&thread->lock);
 
     if (thread->err == 1) {
@@ -139,14 +145,15 @@ _evthr_loop(void * args) {
 } /* _evthr_loop */
 
 evthr_res
-evthr_defer(evthr_t * thread, evthr_cb cb, void * arg) {
+evthr_defer(evthr_t * thread, evthr_cb cb, void * arg)
+{
     evthr_cmd_t cmd = {
         .cb   = cb,
         .args = arg,
         .stop = 0
     };
 
-    if (send(thread->wdr, (const char *)&cmd, sizeof(cmd), 0) <= 0) {
+    if (send(thread->wdr, (char *)&cmd, sizeof(cmd), 0) <= 0) {
         return EVTHR_RES_RETRY;
     }
 
@@ -154,14 +161,15 @@ evthr_defer(evthr_t * thread, evthr_cb cb, void * arg) {
 }
 
 evthr_res
-evthr_stop(evthr_t * thread) {
+evthr_stop(evthr_t * thread)
+{
     evthr_cmd_t cmd = {
         .cb   = NULL,
         .args = NULL,
         .stop = 1
     };
 
-    if (send(thread->wdr, (const char *)&cmd, sizeof(evthr_cmd_t), 0) < 0) {
+    if (send(thread->wdr, (char *)&cmd, sizeof(evthr_cmd_t), 0) < 0) {
         return EVTHR_RES_RETRY;
     }
 
@@ -170,24 +178,28 @@ evthr_stop(evthr_t * thread) {
 }
 
 evbase_t *
-evthr_get_base(evthr_t * thr) {
+evthr_get_base(evthr_t * thr)
+{
     return thr ? thr->evbase : NULL;
 }
 
 void
-evthr_set_aux(evthr_t * thr, void * aux) {
+evthr_set_aux(evthr_t * thr, void * aux)
+{
     if (thr) {
         thr->aux = aux;
     }
 }
 
 void *
-evthr_get_aux(evthr_t * thr) {
+evthr_get_aux(evthr_t * thr)
+{
     return thr ? thr->aux : NULL;
 }
 
 int
-evthr_set_initcb(evthr_t * thr, evthr_init_cb cb) {
+evthr_set_initcb(evthr_t * thr, evthr_init_cb cb)
+{
     if (thr == NULL) {
         return -1;
     }
@@ -198,7 +210,8 @@ evthr_set_initcb(evthr_t * thr, evthr_init_cb cb) {
 }
 
 int
-evthr_set_exitcb(evthr_t * thr, evthr_exit_cb cb) {
+evthr_set_exitcb(evthr_t * thr, evthr_exit_cb cb)
+{
     if (thr == NULL) {
         return -1;
     }
@@ -209,7 +222,8 @@ evthr_set_exitcb(evthr_t * thr, evthr_exit_cb cb) {
 }
 
 static evthr_t *
-_evthr_new(evthr_init_cb init_cb, evthr_exit_cb exit_cb, void * args) {
+_evthr_new(evthr_init_cb init_cb, evthr_exit_cb exit_cb, void * args)
+{
     evthr_t * thread;
     int       fds[2];
 
@@ -241,17 +255,20 @@ _evthr_new(evthr_init_cb init_cb, evthr_exit_cb exit_cb, void * args) {
 } /* evthr_new */
 
 evthr_t *
-evthr_new(evthr_init_cb init_cb, void * args) {
+evthr_new(evthr_init_cb init_cb, void * args)
+{
     return _evthr_new(init_cb, NULL, args);
 }
 
 evthr_t *
-evthr_wexit_new(evthr_init_cb init_cb, evthr_exit_cb exit_cb, void * args) {
+evthr_wexit_new(evthr_init_cb init_cb, evthr_exit_cb exit_cb, void * args)
+{
     return _evthr_new(init_cb, exit_cb, args);
 }
 
 int
-evthr_start(evthr_t * thread) {
+evthr_start(evthr_t * thread)
+{
     if (thread == NULL || thread->thr == NULL) {
         return -1;
     }
@@ -264,7 +281,8 @@ evthr_start(evthr_t * thread) {
 }
 
 void
-evthr_free(evthr_t * thread) {
+evthr_free(evthr_t * thread)
+{
     if (thread == NULL) {
         return;
     }
@@ -285,6 +303,13 @@ evthr_free(evthr_t * thread) {
         event_free(thread->event);
     }
 
+#ifdef EVTHR_SHARED_PIPE
+    if (thread->shared_pool_ev) {
+        event_free(thread->shared_pool_ev);
+    }
+
+#endif
+
     if (thread->evbase) {
         event_base_free(thread->evbase);
     }
@@ -293,7 +318,8 @@ evthr_free(evthr_t * thread) {
 } /* evthr_free */
 
 void
-evthr_pool_free(evthr_pool_t * pool) {
+evthr_pool_free(evthr_pool_t * pool)
+{
     evthr_t * thread;
     evthr_t * save;
 
@@ -311,7 +337,8 @@ evthr_pool_free(evthr_pool_t * pool) {
 }
 
 evthr_res
-evthr_pool_stop(evthr_pool_t * pool) {
+evthr_pool_stop(evthr_pool_t * pool)
+{
     evthr_t * thr;
     evthr_t * save;
 
@@ -326,8 +353,23 @@ evthr_pool_stop(evthr_pool_t * pool) {
     return EVTHR_RES_OK;
 }
 
+static inline int
+get_backlog_(evthr_t * thread)
+{
+#ifdef WIN32
+	u_long backlog = 0;
+	ioctlsocket(thread->rdr, FIONREAD, &backlog);
+#else
+	int backlog = 0;
+    ioctl(thread->rdr, FIONREAD, &backlog);
+#endif
+
+    return (int)(backlog / sizeof(evthr_cmd_t));
+}
+
 evthr_res
-evthr_pool_defer(evthr_pool_t * pool, evthr_cb cb, void * arg) {
+evthr_pool_defer(evthr_pool_t * pool, evthr_cb cb, void * arg)
+{
 #ifdef EVTHR_SHARED_PIPE
     evthr_cmd_t cmd = {
         .cb   = cb,
@@ -340,8 +382,10 @@ evthr_pool_defer(evthr_pool_t * pool, evthr_cb cb, void * arg) {
     }
 
     return EVTHR_RES_OK;
-#else
-    evthr_t * thr = NULL;
+#endif
+    evthr_t * thread      = NULL;
+    evthr_t * min_thread  = NULL;
+    int       min_backlog = 0;
 
     if (pool == NULL) {
         return EVTHR_RES_FATAL;
@@ -351,26 +395,35 @@ evthr_pool_defer(evthr_pool_t * pool, evthr_cb cb, void * arg) {
         return EVTHR_RES_NOCB;
     }
 
-    thr = TAILQ_FIRST(&pool->threads);
 
-    TAILQ_REMOVE(&pool->threads, thr, next);
-    TAILQ_INSERT_TAIL(&pool->threads, thr, next);
+    TAILQ_FOREACH(thread, &pool->threads, next) {
+        int backlog = get_backlog_(thread);
 
+        if (backlog == 0) {
+            min_thread = thread;
+            break;
+        }
 
-    return evthr_defer(thr, cb, arg);
-#endif
+        if (min_thread == NULL || backlog < min_backlog) {
+            min_thread  = thread;
+            min_backlog = backlog;
+        }
+    }
+
+    return evthr_defer(min_thread, cb, arg);
 } /* evthr_pool_defer */
 
 static evthr_pool_t *
 _evthr_pool_new(int           nthreads,
                 evthr_init_cb init_cb,
                 evthr_exit_cb exit_cb,
-                void        * shared) {
+                void        * shared)
+{
     evthr_pool_t * pool;
     int            i;
 
 #ifdef EVTHR_SHARED_PIPE
-    int fds[2];
+    int            fds[2];
 #endif
 
     if (nthreads == 0) {
@@ -415,19 +468,22 @@ _evthr_pool_new(int           nthreads,
 } /* _evthr_pool_new */
 
 evthr_pool_t *
-evthr_pool_new(int nthreads, evthr_init_cb init_cb, void * shared) {
+evthr_pool_new(int nthreads, evthr_init_cb init_cb, void * shared)
+{
     return _evthr_pool_new(nthreads, init_cb, NULL, shared);
 }
 
 evthr_pool_t *
 evthr_pool_wexit_new(int nthreads,
                      evthr_init_cb init_cb,
-                     evthr_exit_cb exit_cb, void * shared) {
+                     evthr_exit_cb exit_cb, void * shared)
+{
     return _evthr_pool_new(nthreads, init_cb, exit_cb, shared);
 }
 
 int
-evthr_pool_start(evthr_pool_t * pool) {
+evthr_pool_start(evthr_pool_t * pool)
+{
     evthr_t * evthr = NULL;
 
     if (pool == NULL) {

@@ -1,15 +1,15 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class CKjConnFactoryBase
+	@class CKjConnFactoryBase
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
-#include "../kj/KjRootContextDef.hpp"
-#include "../kj/ConnFactoryTrunkQueue.hpp"
-#include "../kj/KjConnFactoryWorkQueue.hpp"
-
+#include "../../netsystem/RootContextDef.hpp"
 #include "../TcpConnManager.h"
+
+#include "ConnFactoryTrunkQueue.hpp"
+#include "KjConnFactoryWorkQueue.hpp"
 
 //------------------------------------------------------------------------------
 /**
@@ -17,8 +17,8 @@
 */
 class CKjConnFactoryBase : public ITcpConnFactory {
 public:
-	CKjConnFactoryBase(StdLog *pLog);
-	virtual ~CKjConnFactoryBase();
+	CKjConnFactoryBase();
+	virtual ~CKjConnFactoryBase() noexcept;
 
 	using CLOSED_SERVER_LIST = std::vector<ITcpServer *>;
 
@@ -27,17 +27,12 @@ public:
 	virtual void				OnDelete() override;
 
 	virtual void				OnUpdate() override {
-		_trunkQueue->RunOnce();
 		_connManager.OnCheckConnection();
 	}
 
 	/** **/
 	virtual void *				GetLoopBase() override {
-		return g_rootContext.get();
-	}
-
-	virtual StdLog *			GetLogHandler() override {
-		return _refLog;
+		return netsystem_get_servercore()->GetCtx();
 	}
 
 	virtual ITcpConnManager&	GetConnManager() override {
@@ -49,24 +44,22 @@ public:
 	/************************************************************************/
 	virtual int					OpenTcpServer(ITcpServer *pServer, unsigned short nPort) override { return _workQueue->OpenTcpServer(pServer, nPort); }
 	virtual void				CloseTcpServer(ITcpServer *pServer) override { _workQueue->CloseTcpServer(pServer); _vClosedServer.push_back(pServer); }
-	virtual void				DisposeConnection(ITcpConn *pConn) override { _workQueue->DisposeConnection(pConn); }
+	virtual void				FlushTcpServerDownStream(ITcpServer *pServer, uintptr_t streamptr) override { _workQueue->FlushTcpServerDownStream(pServer, streamptr); }
 
-	virtual void				PostPacket(ITcpConn *pConn, uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) override {
-		_workQueue->PostPacket(pConn, uInnerUuid, uSerialNo, sTypeName, sBody);
+	virtual void				ReleaseConnection(ITcpConn *pConn) override { _workQueue->DisposeConnection(pConn); }
+
+	virtual void				PostPacket(ITcpConn *pConn, uint64_t uInnerUuid, uint8_t uSerialNo, std::string&& sTypeName, std::string&& sBody) override {
+		_workQueue->PostPacket(pConn, uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody));
 	}
 
 	virtual void				ConfirmClientIsReady(ITcpClient *pClient, uintptr_t streamptr) override { _workQueue->ConfirmClientIsReady(pClient, streamptr); }
 
-	virtual void				PostBroadcastPacket(ITcpServer *pServer, std::vector<uint64_t>& vTarget, std::string& sTypeName, std::string& sBody) override {
-		_workQueue->PostBroadcastPacket(pServer, vTarget, sTypeName, sBody);
+	virtual void				PostBroadcastPacket(ITcpServer *pServer, std::vector<uint64_t>& vTarget, std::string&& sTypeName, std::string&& sBody) override {
+		_workQueue->PostBroadcastPacket(pServer, vTarget, std::move(sTypeName), std::move(sBody));
 	}
 
 	virtual int					IsolatedConnConnect(ITcpIsolated *pIsolated, std::string sIp_or_Hostname, unsigned short nPort) override {
 		return _workQueue->IsolatedConnConnect(pIsolated, sIp_or_Hostname, nPort);
-	}
-
-	virtual void				IsolatedConnFlush(ITcpIsolated *pIsolated) override {
-		_workQueue->IsolatedConnFlush(pIsolated);
 	}
 
 	virtual void				IsolatedConnDelayReconnect(ITcpIsolated *pIsolated, int nDelaySeconds) override {
@@ -76,8 +69,8 @@ public:
 	/************************************************************************/
 	/* Callback recv from backend (thread)                                  */
 	/************************************************************************/
-	virtual void				AddAcceptClientCb(ITcpServer *pServer, uintptr_t streamptr, std::string& sPeerIp) override {
-		_trunkQueue->AddAcceptClientCb(pServer, streamptr, sPeerIp);
+	virtual void				AddAcceptClientCb(ITcpServer *pServer, uintptr_t streamptr, std::string&& sPeerIp) override {
+		_trunkQueue->AddAcceptClientCb(pServer, streamptr, std::move(sPeerIp));
 	}
 
 	virtual void				AddClientDisconnectCb(ITcpServer *pServer, ITcpClient *pClient, ITcpConnManager *pConnMgr) override {
@@ -108,12 +101,19 @@ public:
 		_trunkQueue->AddIsolatedInnerPacketCb(pIsolated, uConnId, uInnerUuid, uSerialNo, std::move(sTypeName), std::move(sBody));
 	}
 
-protected:
-	StdLog *_refLog;
+private:
+	void						StartPipeWorker();
 
+public:
 	CConnFactoryTrunkQueuePtr _trunkQueue;
 	CKjConnFactoryWorkQueuePtr _workQueue;
 
+	//! threads
+	svrcore_pipeworker_t *_refPipeWorker = nullptr;
+	char _trunkOpCodeSend = 0;
+	char _trunkOpCodeRecvBuf[1024];
+
+protected:
 	CTcpConnManager _connManager;
 
 	std::unordered_map<uintptr_t, ITcpServer *> _mapServer; // pointer 2 server

@@ -7,6 +7,7 @@
 
 (C) 2016 n.lee
 */
+#include "../../UsingBase.h"
 #include "../IHttpServer.h"
 
 #ifdef __cplusplus
@@ -27,7 +28,7 @@ class CEvConnFactory;
 */
 class CLibevhtpServer : public IHttpServer {
 public:
-	CLibevhtpServer(unsigned short nPort, StdLog *pLog = nullptr);
+	CLibevhtpServer(unsigned short nPort);
 	virtual ~CLibevhtpServer();
 
 	/** **/
@@ -39,7 +40,19 @@ public:
 	/** **/
 	virtual void				OnUpdate();
 
-public:
+	/** send close signal. **/
+	virtual void				Close();
+	virtual bool				IsClosed();
+
+	/** */
+	virtual void *				GetBase() {
+		return _srvr._base;
+	}
+
+	virtual unsigned short		GetPort() {
+		return _srvr._port;
+	}
+
 	/** **/
 	virtual void				RegisterInitHandler(HTTP_INIT_HANDLER d) {
 		_initHandler = d;
@@ -55,20 +68,7 @@ public:
 	virtual void				PauseRequest(void *req_handle);
 	virtual void				ResumeRequest(void *req_handle);
 
-	virtual void				ForEach(void *query_handle, HTTP_QUERY_ITERATOR kvscb);
-
-	/** send close signal. **/
-	virtual void				Close();
-	virtual bool				IsClosed();
-
-	/** */
-	virtual void *				GetBase() {
-		return _srvr._base;
-	}
-
-	virtual unsigned short		GetPort() {
-		return _srvr._port;
-	}
+	virtual bool				ParseQueryString(void *req_handle, std::string& outQueyString);
 
 protected:
 	CLibevhtpServer(const CLibevhtpServer& s) {}
@@ -82,7 +82,6 @@ protected:
 
 public:
 	//////////////////////////////////////////////////////////////////////////
-	StdLog					*_refLog;
 	HTTP_INIT_HANDLER		_initHandler;
 	HTTP_REQUEST_HANDLER	_requsetHandler;
 	

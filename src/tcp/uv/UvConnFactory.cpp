@@ -23,8 +23,8 @@
 /**
 
 */
-CUvConnFactory::CUvConnFactory(StdLog *pLog)
-	: CUvConnFactoryBase(pLog) {
+CUvConnFactory::CUvConnFactory()
+	: CUvConnFactoryBase() {
 
 }
 
@@ -52,9 +52,9 @@ CUvConnFactory::CreateTcpServer() {
 
 */
 ITcpClient *
-CUvConnFactory::CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) {
+CUvConnFactory::CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) {
 	uint64_t uConnId = _connManager.GetNextConnectionId();
-	ITcpClient *pClient = new CUvClientConn(uConnId, sPeerIp, pServer);
+	ITcpClient *pClient = new CUvClientConn(uConnId, std::move(sPeerIp), pServer);
 	_connManager.OnAddClient(pServer, pClient);
 	return pClient;
 }
