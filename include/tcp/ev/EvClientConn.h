@@ -5,8 +5,6 @@
     
     (C) 2016 n.lee
 */
-#include "../../common/UsingMyToolkitMini.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,7 +26,7 @@ extern "C" {
 */
 class CEvClientConn : public ITcpClient {
 public:
-	CEvClientConn(uint64_t uConnId, const std::string& sPeerIp, ITcpServer *pServer);
+	CEvClientConn(uint64_t uConnId, std::string&& sPeerIp, ITcpServer *pServer);
 	virtual ~CEvClientConn();
 
 	/** **/
@@ -47,6 +45,8 @@ public:
 public:
 	/** **/
 	virtual void				DisposeConnection() override;
+	virtual void				FlushStream() override;
+
 	virtual void				PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) override;
 	virtual size_t				SendRaw(const uint8_t *buf, size_t len) override;
 

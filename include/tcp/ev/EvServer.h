@@ -5,7 +5,7 @@
 
 (C) 2016 n.lee
 */
-#include "../../common/UsingMyToolkitMini.h"
+#include "../../UsingBase.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,32 +30,37 @@ public:
 	virtual ~CEvServer();
 
 	/** Server accept and dispose client */
-	virtual ITcpClient *		OnAcceptClient(uintptr_t streamptr, const std::string& sPeerIp);
-	virtual void				OnDisposeClient(ITcpClient *pClient);
+	virtual ITcpClient *		OnAcceptClient(uintptr_t streamptr, std::string&& sPeerIp) override;
+	virtual void				OnDisposeClient(ITcpClient *pClient) override;
 
 public:
 	/** Open and close **/
-	virtual int					Open(void *base, unsigned short port);
-	virtual void				Close();
+	virtual int					Open(void *base, unsigned short port) override;
+	virtual void				Close() override;
+	virtual void				FlushDownStream(uintptr_t streamptr) override;
 
-	virtual bool				IsClosed() {
+	virtual bool				IsClosed() override {
 		return _closed;
 	}
 
+	virtual bool				IsReady() override {
+		return !IsClosed() && GetEventManager().IsReady();
+	}
+
 	/** **/
-	virtual void *				GetBase() {
+	virtual void *				GetBase() override {
 		return ev_server_get_base_(&_srvr);
 	}
 
-	virtual unsigned short		GetPort() {
+	virtual unsigned short		GetPort() override {
 		return _srvr._port;
 	}
 
-	virtual ITcpConnFactory&	GetConnFactory() {
+	virtual ITcpConnFactory&	GetConnFactory() override {
 		return *_refConnFactory;
 	}
 
-	virtual ITcpEventManager& 	GetEventManager() {
+	virtual ITcpEventManager& 	GetEventManager() override {
 		return *_eventManager;
 	}
 

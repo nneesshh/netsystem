@@ -15,7 +15,7 @@
 */
 class ITcpConnManager {
 public:
-	virtual ~ITcpConnManager() noexcept(false) { }
+	virtual ~ITcpConnManager() noexcept { }
 
 	/** **/
 	virtual void				OnCheckConnection() = 0;
@@ -24,12 +24,14 @@ public:
 	virtual void				OnAddClient(ITcpServer *pServer, ITcpClient *pClient) = 0;
 	virtual void				OnRemoveClient(ITcpServer *pServer, ITcpClient *pClient) = 0;
 
-	virtual void				OnRemoveAllClients(ITcpServer *pServer) = 0;
-	virtual void				OnDisposeAllClients(ITcpServer *pServer) = 0;
-
 	/** **/
 	virtual void				OnAddIsolated(ITcpIsolated *pIsolated) = 0;
-	virtual void				OnRemoveAllIsolateds() = 0;
+
+	/** **/
+	virtual void				ReleaseAllClients(ITcpServer *pServer) = 0;
+	virtual void				ReleaseAllIsolateds() = 0;
+
+	virtual void				DisposeDownStreams(ITcpServer *pServer) = 0;
 
 	/** **/
 	virtual ITcpClient *		LookupClientByConnId(uint64_t uConnId) = 0;

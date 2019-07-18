@@ -1,11 +1,11 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class ITcpConn
+	@class ITcpConn
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
-#include "../common/UsingMyToolkitMini.h"
+#include "../UsingProtobuf.h"
 #include "../base/bip_buf.h"
 
 #include "tcp_def.h"
@@ -18,7 +18,7 @@ class ITcpEventManager;
 */
 class ITcpConn {
 public:
-	virtual ~ITcpConn() noexcept(false) { }
+	virtual ~ITcpConn() noexcept { }
 
 	/** **/
 	virtual void				OnConnect() = 0;
@@ -30,6 +30,8 @@ public:
 public:
 	/** **/
 	virtual void				DisposeConnection() = 0;
+	virtual void				FlushStream() = 0;
+
 	virtual void				PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) = 0;
 	virtual size_t				SendRaw(const uint8_t *buf, size_t len) = 0;
 

@@ -5,6 +5,8 @@
 
 (C) 2016 n.lee
 */
+#include "servercore/log/StdLog.h"
+
 #include "../ITcpConnFactory.h"
 #include "../ITcpEventManager.h"
 
@@ -24,7 +26,7 @@ extern "C" {
 */
 class CEvConnFactory : public ITcpConnFactory {
 public:
-	CEvConnFactory(StdLog *pLog);
+	CEvConnFactory();
 	virtual ~CEvConnFactory();
 
 	using CLOSED_SERVER_LIST = std::vector<ITcpServer *>;
@@ -52,24 +54,22 @@ public:
 	/************************************************************************/
 	virtual int					OpenTcpServer(ITcpServer *pServer, unsigned short nPort) override { return pServer->Open(_loopBase, nPort); }
 	virtual void				CloseTcpServer(ITcpServer *pServer) override { pServer->Close(); _vClosedServer.push_back(pServer); }
-	virtual void				DisposeConnection(ITcpConn *pConn) override { pConn->DisposeConnection(); }
+	virtual void				FlushTcpServerDownStream(ITcpServer *pServer, uintptr_t streamptr) override { pServer->FlushDownStream(streamptr); }
 
-	virtual void				PostPacket(ITcpConn *pConn, uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) override {
+	virtual void				ReleaseConnection(ITcpConn *pConn) override { pConn->DisposeConnection(); }
+
+	virtual void				PostPacket(ITcpConn *pConn, uint64_t uInnerUuid, uint8_t uSerialNo, std::string&& sTypeName, std::string&& sBody) override {
 		pConn->PostPacket(uInnerUuid, uSerialNo, sTypeName, sBody);
 	}
 
 	virtual void				ConfirmClientIsReady(ITcpClient *pClient, uintptr_t streamptr) override { pClient->ConfirmClientIsReady(_loopBase, streamptr); }
 
-	virtual void				PostBroadcastPacket(ITcpServer *pServer, std::vector<uint64_t>& vTarget, std::string& sTypeName, std::string& sBody) override {
+	virtual void				PostBroadcastPacket(ITcpServer *pServer, std::vector<uint64_t>& vTarget, std::string&& sTypeName, std::string&& sBody) override {
 		//pServer->PostBroadcastPacket(vTarget, sTypeName, sBody);
 	}
 
 	virtual int					IsolatedConnConnect(ITcpIsolated *pIsolated, std::string sIp_or_Hostname, unsigned short nPort) override {
 		return pIsolated->Connect(_loopBase, sIp_or_Hostname, nPort);
-	}
-
-	virtual void				IsolatedConnFlush(ITcpIsolated *pIsolated) override {
-		pIsolated->FlushConnection();
 	}
 
 	virtual void				IsolatedConnDelayReconnect(ITcpIsolated *pIsolated, int nDelaySeconds) override {
@@ -79,9 +79,8 @@ public:
 	/************************************************************************/
 	/* Callback recv from backend (thread)                                  */
 	/************************************************************************/
-	virtual void				AddAcceptClientCb(ITcpServer *pServer, uintptr_t streamptr, std::string& sPeerIp) override {
-
-		pServer->OnAcceptClient(streamptr, sPeerIp);
+	virtual void				AddAcceptClientCb(ITcpServer *pServer, uintptr_t streamptr, std::string&& sPeerIp) override {
+		//pServer->OnAcceptClient(streamptr, sPeerIp);
 	}
 	
 	virtual void				AddClientDisconnectCb(ITcpServer *pServer, ITcpClient *pClient, ITcpConnManager *pConnMgr) override {
@@ -107,12 +106,7 @@ public:
 		pClient->GetEventManager().OnInnerPacket(pClient, uInnerUuid, uSerialNo, sTypeName, sBody);
 	}
 
-	virtual void				AddIsolatedConnectCb(ITcpIsolated *pIsolated, ITcpConnManager *pConnMgr) override {
-		
-		fprintf(stderr, "Connect ok -- connid(%08llu)connptr(0x%08Ix).\n",
-			pIsolated->GetConnId(), (uintptr_t)pIsolated);
-		pIsolated->OnConnect();
-	}
+	virtual void				AddIsolatedConnectCb(ITcpIsolated *pIsolated, ITcpConnManager *pConnMgr) override;
 
 	virtual void				AddIsolatedDisconnectCb(ITcpIsolated *pIsolated, ITcpConnManager *pConnMgr) override {
 
@@ -138,7 +132,7 @@ public:
 
 	/** **/
 	virtual ITcpServer *		CreateTcpServer() override;
-	virtual ITcpClient *		CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) override;
+	virtual ITcpClient *		CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) override;
 
 	/** **/
 	virtual ITcpIsolated *		CreateTcpIsolated() override;
@@ -146,7 +140,6 @@ public:
 
 protected:
 	void *_loopBase;
-	StdLog *_refLog;
 	CTcpConnManager _connManager;
 
 	std::unordered_map<uintptr_t, ITcpServer *> _mapServer; // pointer 2 server

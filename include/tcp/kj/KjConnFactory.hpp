@@ -1,9 +1,9 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class CKjConnFactory
+	@class CKjConnFactory
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
 #include "KjConnFactoryBase.hpp"
 
@@ -13,12 +13,12 @@
 */
 class CKjConnFactory : public CKjConnFactoryBase {
 public:
-	CKjConnFactory(StdLog *pLog);
+	CKjConnFactory();
 	virtual ~CKjConnFactory();
 
 	/** **/
 	virtual ITcpServer *		CreateTcpServer() override;
-	virtual ITcpClient *		CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) override;
+	virtual ITcpClient *		CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) override;
 
 	/** **/
 	virtual ITcpIsolated *		CreateTcpIsolated() override;

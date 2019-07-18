@@ -30,8 +30,7 @@
 *.exe
 *.out
 *.app
-/bin/Debug/redisservice.ilk
-/build/redisservice.dir/obj/Debug/redisservice.tlog/CL.command.1.tlog
+*.tlog
 *.tlog
 *.log
 *.suo
@@ -43,9 +42,8 @@
 *.opendb
 
 build/\.vs/
-
+include/
 lib/Debug/
-
 lib/Release/
 
 *.idb

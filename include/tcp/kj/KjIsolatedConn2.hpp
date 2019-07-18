@@ -5,7 +5,7 @@
     
     (C) 2016 n.lee
 */
-#include "../../common/UsingMyToolkitMini.h"
+#include "servercore/io/KjPipeEndpointIoContext.hpp"
 
 #include "../IPacket.h"
 #include "../ITcpIsolated.h"
@@ -13,8 +13,6 @@
 #include "../ITcpEventManager.h"
 
 #include "../TcpConnManager.h"
-
-#include "../kj/KjSimpleThreadIoContext.hpp"
 #include "../kj/KjTcpConnection.hpp"
 
 //------------------------------------------------------------------------------
@@ -24,7 +22,7 @@
 class CKjIsolatedConn2 : public ITcpIsolated, public kj::TaskSet::ErrorHandler {
 public:
 	CKjIsolatedConn2(uint64_t uConnId, ITcpConnFactory *pFactory);
-	virtual ~CKjIsolatedConn2();
+	virtual ~CKjIsolatedConn2() noexcept;
 
 	/** **/
 	virtual void				OnConnect() override;
@@ -46,11 +44,13 @@ public:
 public:
 	/** **/
 	virtual void				DisposeConnection() override;
+	virtual void				FlushStream() override;
+
 	virtual void				PostPacket(uint64_t uInnerUuid, uint8_t uSerialNo, std::string& sTypeName, std::string& sBody) override;
 	
 	virtual size_t				SendRaw(const uint8_t *buf, size_t len) override {
 
-		_thr_tcpConnection->Write(buf, len);
+		_thr_tcpStream->Write(buf, len);
 
 		CTcpConnManager::s_send += len;
 		return len;
@@ -146,10 +146,14 @@ public:
 	/** **/
 	virtual void				OnIsolatedError() override;
 
+	/** **/
+	virtual	void				SetConnectedEventPosted(bool x = true) override {
+		_bConnectedEventPosted = x;
+	}
+
 	/** Connect and reconnect **/
 	virtual int					Connect(void *base, std::string& sIp_or_Hostname, unsigned short nPort) override;
 	virtual void				Reconnect() override;
-	virtual void				FlushConnection() override;
 	virtual void				DelayReconnect(int nDelaySeconds) override;
 
 	/** **/
@@ -160,9 +164,9 @@ private:
 	void taskFailed(kj::Exception&& exception) override;
 
 public:
-	kj::Own<KjSimpleThreadIoContext> _thr_tioContext;
+	kj::Own<KjPipeEndpointIoContext> _thr_endpointContext;
 	kj::Own<kj::TaskSet> _thr_tasks;
-	kj::Own<KjTcpConnection> _thr_tcpConnection;
+	kj::Own<KjTcpConnection> _thr_tcpStream;
 
 	IPacket *_thr_packet = nullptr;
 
@@ -181,6 +185,7 @@ private:
 	bool					_bConnected = false;	/// socket is connected (tcp/udp)
 	bool					_bDisposed = false;		/// start close and delete flag
 	bool					_bFlushed = true;
+	bool					_bConnectedEventPosted = false; /// backend is connected and "OnConnect()" event is posted to frontend
 
 	unsigned int			_frontEndProduceNum = 0;
 	unsigned int			_frontEndConsumeNum = 0;

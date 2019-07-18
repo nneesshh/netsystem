@@ -61,10 +61,10 @@ public:
 		time_t tmNow,
 		ONLINE_HANDLE **ppOutAccount) = 0;
 
-	virtual void				Unregister(ONLINE_HANDLE& account) = 0;
-	virtual void				UnregisterByConnId(uint64_t uConnId) = 0;
+	virtual void				Unregister(ONLINE_HANDLE& account, time_t tmNow) = 0;
+	virtual void				UnregisterByConnId(uint64_t uConnId, time_t tmNow) = 0;
 
-	/** Return online items. */
+	/** Return list of online items. */
 	virtual ONLINE_LIST& 		GetOnlineList() = 0;
 
 	/** **/

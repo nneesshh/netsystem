@@ -1,9 +1,9 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class CNetSystem
+	@class CNetSystem
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
 #include "INetSystem.h"
 
@@ -11,18 +11,20 @@
 /**
 @brief CNetSystem
 */
-class MY_EXTERN CNetSystem : public INetSystem {
+class MY_NETSYSTEM_EXTERN CNetSystem : public INetSystem {
 	// params: void cb(int nConnectionCount, int nAccountCount, int nRecvBytes, int nSendBytes)
 	using net_system_stats_cb = std::function<void(int, int, int, int)>;
 
 public:
-	CNetSystem();
+	CNetSystem(void *servercore);
 	virtual ~CNetSystem();
 
 public:
-	virtual int					Init(LOBBY_TYPE eType, unsigned int port, StdLog *pLog, const std::function<void(int, int, int, int)> stats_cb) override;
-	virtual void				Dispose() override;
-	virtual void				Update() override;
+	/** **/
+	virtual void				OnUpdate() override;
+
+	/** **/
+	virtual int					Init(LOBBY_TYPE eType, unsigned int port, const std::function<void(int, int, int, int)> stats_cb) override;
 
 	/** **/
 	virtual ILobby&				GetLobby() override {
@@ -53,17 +55,20 @@ public:
 	virtual IURLHttpRequest *	OpenURLHttpRequest() override;
 	virtual IURLSSLRequest *	OpenURLSSLRequest() override;
 
+	/** **/
+	virtual void				Shutdown() override;
+
 private:
 	int							InitNullLobby();
-	int							InitLobby(unsigned short nPort, StdLog *pLog);
-	int							InitGateLobby(unsigned short nPort, StdLog *pLog);
+	int							InitLobby(unsigned short nPort);
+	int							InitGateLobby(unsigned short nPort);
 	void						DisposeLobby();
 
 private:
 	net_system_stats_cb _stats_cb;
 
-	bool  _isLobbyReady;
-	ILobby *_lobby;
+	bool    _isLobbyReady = false;
+	ILobby *_lobby = nullptr;
 };
 
 /*EOF*/

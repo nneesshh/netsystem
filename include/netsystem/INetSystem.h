@@ -1,21 +1,30 @@
 #pragma once
 //------------------------------------------------------------------------------
 /**
-@class INetSystem
+	@class INetSystem
 
-(C) 2016 n.lee
+	(C) 2016 n.lee
 */
-#include "../common/UsingMyToolkitMini.h"
+#include <functional>
 
-#include "../tcp/tcp_def.h"
-#include "../tcp/tcp_packet_def.h"
-#include "../tcp/ITcpConnFactory.h"
-#include "../tcp/ITcpEventManager.h"
+#ifdef _WIN32
+#pragma comment(lib, "WS2_32.Lib")
+#pragma comment(lib, "Wldap32.Lib")
+#pragma comment(lib, "IPHlpApi.Lib")
+#pragma comment(lib, "Psapi.Lib")
+#pragma comment(lib, "UserEnv.Lib")
+#endif
+
+#include "../base/netsystem_extern.h"
 
 #include "../lobby/ILobby.h"
 #include "../lobby/IZoneManager.h"
 #include "../lobby/IAccountManager.h"
 #include "../lobby/IAccountStateList.h"
+
+#include "../tcp/tcp_packet_def.h"
+#include "../tcp/ITcpConnFactory.h"
+#include "../tcp/ITcpEventManager.h"
 
 #include "../http/IHttpServer.h"
 #include "../http/IURLHttpRequest.h"
@@ -32,14 +41,15 @@ enum LOBBY_TYPE {
 /**
 @brief INetSystem
 */
-class MY_EXTERN INetSystem {
+class MY_NETSYSTEM_EXTERN INetSystem {
 public:
 	virtual ~INetSystem() { }
 
 	/** **/
-	virtual int					Init(LOBBY_TYPE eType, unsigned int port, StdLog *pLog, const std::function<void(int, int, int, int)> stats_cb) = 0;
-	virtual void				Dispose() = 0;
-	virtual void				Update() = 0;
+	virtual void				OnUpdate() = 0;
+
+	/** **/
+	virtual int					Init(LOBBY_TYPE eType, unsigned int port, const std::function<void(int, int, int, int)> stats_cb) = 0;
 
 	/** **/
 	virtual ILobby&				GetLobby() = 0;
@@ -57,6 +67,8 @@ public:
 	virtual IURLHttpRequest *	OpenURLHttpRequest() = 0;
 	virtual IURLSSLRequest *	OpenURLSSLRequest() = 0;
 
+	/** **/
+	virtual void				Shutdown() = 0;
 };
 
 /*EOF*/

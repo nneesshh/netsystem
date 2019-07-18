@@ -13,12 +13,12 @@
 */
 class CKjGateConnFactory : public CKjConnFactoryBase {
 public:
-	CKjGateConnFactory(StdLog *pLog);
+	CKjGateConnFactory();
 	virtual ~CKjGateConnFactory();
 
 	/** **/
 	virtual ITcpServer *		CreateTcpServer() override;
-	virtual ITcpClient *		CreateTcpClientOnServer(const std::string& sPeerIp, ITcpServer *pServer) override;
+	virtual ITcpClient *		CreateTcpClientOnServer(std::string&& sPeerIp, ITcpServer *pServer) override;
 
 	/** **/
 	virtual ITcpIsolated *		CreateTcpIsolated() override;

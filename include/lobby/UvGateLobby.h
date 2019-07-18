@@ -6,6 +6,8 @@
     
     (C) 2016 n.lee
 */
+#include "servercore/log/StdLog.h"
+
 #include "../tcp/tcp_packet_def.h"
 #include "../tcp/TcpConnManager.h"
 
@@ -17,7 +19,7 @@
 */
 class CUvGateLobby : public ILobby {
 public:
-	CUvGateLobby(unsigned short nPort, StdLog *pLog);
+	CUvGateLobby(unsigned short nPort);
 	virtual ~CUvGateLobby();
 
 public:

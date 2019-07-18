@@ -2,8 +2,9 @@
 
 #include <functional>
 
+#include "servercore/io/KjPipeEndpointIoContext.hpp"
+
 #include "base/bip_buf.h"
-#include "KjSimpleThreadIoContext.hpp"
 
 class KjTcpConnection {
 public:
@@ -21,7 +22,7 @@ public:
 
 public:
 	//! ctor & dtor
-	KjTcpConnection(kj::Own<KjSimpleThreadIoContext> tioContext, uint64_t connid);
+	KjTcpConnection(kj::Own<KjPipeEndpointIoContext> tioContext, uint64_t connid);
 	~KjTcpConnection();
 
 	//! copy ctor & assignment operator
@@ -85,7 +86,7 @@ private:
 	kj::Promise<void> AsyncReadLoop();
 	
 public:
-	kj::Own<KjSimpleThreadIoContext> _tioContext;
+	kj::Own<KjPipeEndpointIoContext> _tioContext;
 	kj::Own<kj::NetworkAddress> _addr;
 	kj::Own<kj::AsyncIoStream> _stream;
 

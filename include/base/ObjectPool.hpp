@@ -8,11 +8,9 @@
 */
 #include <algorithm>
 #include <assert.h>
-#include <shared_mutex>
 
 #define OBJECT_POOL_ITERATE_USED_OBJECT_BEGIN(_pool, _obj)			\
 	do {															\
-		std::unique_lock<std::shared_timed_mutex> _(_pool->_mutex);	\
 		for (unsigned int __idx__ = 0; __idx__ < _pool->_total_size; ++__idx__) {		\
 			if (_pool->_all_elements[__idx__]._used) {				\
 				_obj = &(_pool->_all_elements[__idx__]._data);
@@ -32,7 +30,6 @@ namespace CC_CONTAINER {
 			bool _used;
 		};
 
-		std::shared_timed_mutex	 _mutex;
 		unsigned int			 _base_id;
 		unsigned int			 _total_size;
 		object_pool_node_t		*_all_elements;
@@ -57,7 +54,6 @@ namespace CC_CONTAINER {
 		}
 
 		void					SafeInit(unsigned int base_id, unsigned int size) {
-			std::unique_lock<std::shared_timed_mutex> _(_mutex);
 			unsigned int i;
 
 			_base_id = base_id;
@@ -74,7 +70,6 @@ namespace CC_CONTAINER {
 		}
 
 		unsigned int			SafeAlloc() {
-			std::unique_lock<std::shared_timed_mutex> _(_mutex);
 			unsigned int id;
 
 			// eg: _base_id=600000, id=_total_size, objid=600001
@@ -86,7 +81,6 @@ namespace CC_CONTAINER {
 		}
 
 		unsigned int			SafeAlloc(unsigned int objid) {
-			std::unique_lock<std::shared_timed_mutex> _(_mutex);
 			unsigned int i, id;
 
 			id = ConvertId(_base_id, _total_size, objid);
@@ -105,7 +99,6 @@ namespace CC_CONTAINER {
 		}
 
 		void					Release(unsigned int objid) {
-			std::unique_lock<std::shared_timed_mutex> _(_mutex);
 			ReleaseInternal(objid);
 		}
 

@@ -7,8 +7,6 @@
 */
 #include <functional>
 
-#include "ITcpConn.h"
-
 //
 enum TCP_EVENT_ID {
 	CONNECTION_CONNECTED = 1,
@@ -20,6 +18,7 @@ enum TCP_EVENT_ID {
 };
 
 //
+class ITcpConn;
 using TCP_EVENT_HANDLER = std::function<void(ITcpConn *)>;
 using TCP_PACKET_HANDLER = std::function<void(ITcpConn *, uint8_t, std::string&, std::string&)>;
 using TCP_INNER_PACKET_HANDLER = std::function<void(ITcpConn *, uint64_t, uint8_t, std::string&, std::string&)>;
@@ -30,7 +29,7 @@ using TCP_INNER_PACKET_HANDLER = std::function<void(ITcpConn *, uint64_t, uint8_
 */
 class ITcpEventManager {
 public:
-	virtual ~ITcpEventManager() noexcept(false) { }
+	virtual ~ITcpEventManager() noexcept { }
 
 	/** **/
 	virtual void				OnEvent(TCP_EVENT_ID nEventId, ITcpConn *pConn) = 0;

@@ -7,6 +7,7 @@
     
     (C) 2016 n.lee
 */
+#include "../../UsingBase.h"
 #include "../IHttpServer.h"
 
 #ifdef __cplusplus
@@ -27,7 +28,7 @@ class CEvConnFactory;
 */
 class CEvHttpServer : public IHttpServer {
 public:
-	CEvHttpServer(unsigned short nPort, StdLog *pLog = nullptr);
+	CEvHttpServer(unsigned short nPort);
 	virtual ~CEvHttpServer();
 
 	/** **/
@@ -39,10 +40,17 @@ public:
 	/** **/
 	virtual void				OnUpdate();
 
-public:
-	virtual void				OnRequest(const char *decoded_path, void *req, char *buff, size_t nLen) {
-		if (_requsetHandler)
-			_requsetHandler(this, decoded_path, req, buff, nLen);
+	/** send close signal. **/
+	virtual void				Close();
+	virtual bool				IsClosed();
+
+	/** */
+	virtual void *				GetBase() {
+		return _srvr._base;
+	}
+
+	virtual unsigned short		GetPort() {
+		return _srvr._port;
 	}
 
 public:
@@ -61,19 +69,12 @@ public:
 	virtual void				PauseRequest(void *req_handle) { }
 	virtual void				ResumeRequest(void *req_handle) { }
 
-	virtual void				ForEach(void *query_handle, HTTP_QUERY_ITERATOR kvscb) { }
+	virtual bool				ParseQueryString(void *req_handle, std::string& outQueyString);
 
-	/** send close signal. **/
-	virtual void				Close();
-	virtual bool				IsClosed();
-
-	/** */
-	virtual void *				GetBase() {
-		return _srvr._base;
-	}
-
-	virtual unsigned short		GetPort() {
-		return _srvr._port;
+public:
+	virtual void				OnRequest(const char *decoded_path, void *req, char *buff, size_t nLen) {
+		if (_requsetHandler)
+			_requsetHandler(this, decoded_path, req, buff, nLen);
 	}
 
 protected:
@@ -88,7 +89,6 @@ protected:
 
 public:
 	//////////////////////////////////////////////////////////////////////////
-	StdLog					*_refLog;
 	HTTP_INIT_HANDLER		_initHandler;
 	HTTP_REQUEST_HANDLER	_requsetHandler;
 };

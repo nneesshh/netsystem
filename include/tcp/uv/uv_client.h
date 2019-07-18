@@ -6,7 +6,7 @@
 extern "C" { 
 #endif
 
-#include "../../base/platform_types.h"
+#include "../../base/netsystem_extern.h"
 
 #include "../ev/client_handle.h"
 #include "../ev/server_handle.h"
@@ -40,24 +40,24 @@ typedef struct {
 } write_req_t;
 
 /** **/
-MY_EXTERN uv_loop_t *			uv_loop_new_();
-MY_EXTERN void					uv_loop_delete_(uv_loop_t *loop);
-MY_EXTERN int					uv_loop_run_(uv_loop_t *loop);
-MY_EXTERN int					uv_loop_run_once_(uv_loop_t *loop);
+MY_NETSYSTEM_EXTERN uv_loop_t *			uv_loop_new_();
+MY_NETSYSTEM_EXTERN void				uv_loop_delete_(uv_loop_t *loop);
+MY_NETSYSTEM_EXTERN int					uv_loop_run_(uv_loop_t *loop);
+MY_NETSYSTEM_EXTERN int					uv_loop_run_once_(uv_loop_t *loop);
 
-MY_EXTERN void					uv_close_(uv_handle_t *sockimpl, uv_close_cb on_sock_close);
+MY_NETSYSTEM_EXTERN void				uv_close_(uv_handle_t *sockimpl, uv_close_cb on_sock_close);
 
-MY_EXTERN client_handle_t *		uv_connect_(uv_loop_t *loop, const char *ip, unsigned short port, uv_connect_cb on_error);
-MY_EXTERN int					uv_real_connect_(client_handle_t *clnt, uv_loop_t *loop, uv_connect_cb on_error);
+MY_NETSYSTEM_EXTERN client_handle_t *	uv_connect_(uv_loop_t *loop, const char *ip, unsigned short port, uv_connect_cb on_error);
+MY_NETSYSTEM_EXTERN int					uv_real_connect_(client_handle_t *clnt, uv_loop_t *loop, uv_connect_cb on_error);
 
-MY_EXTERN uv_timer_t *			uv_create_timer_(uv_loop_t *loop, void *arg);
+MY_NETSYSTEM_EXTERN uv_timer_t *		uv_create_timer_(uv_loop_t *loop, void *arg);
  
-MY_EXTERN int					uv_start_timer_(uv_timer_t *timer_handle
-										, uv_timer_cb cb
-										, uint64_t timeout
-										, uint64_t repeat);
+MY_NETSYSTEM_EXTERN int					uv_start_timer_(uv_timer_t *timer_handle
+														, uv_timer_cb cb
+														, uint64_t timeout
+														, uint64_t repeat);
 
-MY_EXTERN void					uv_stop_and_free_timer_(uv_timer_t *timer_handle);
+MY_NETSYSTEM_EXTERN void				uv_stop_and_free_timer_(uv_timer_t *timer_handle);
 
 #ifdef __cplusplus 
 } 
